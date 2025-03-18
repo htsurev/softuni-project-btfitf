@@ -1,0 +1,24 @@
+{
+    "14e4a17f-097c-44f7-931e-b8d10fa3aa62": {
+        "imageUrl": "https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg",
+        "clubName": "Фолкън",
+        "city": "Благоевград",
+        "postcode": "2700",
+        "address": "плд. \"Георги Измирлиев\" №5",
+        "phoneNumberOne": "0897918913",
+        "phoneNumberTwo": "0895555162 ",
+        "email": "tkd_falcon@abv.bg",
+        "_id": "14e4a17f-097c-44f7-931e-b8d10fa3aa62"
+    },
+    "76595aaa-12ce-4a2f-9b55-cb959e3af185": {
+        "imageUrl": "https://itfbulgaria.com/wp-content/uploads/2022/02/astk_logo_200px.png",
+        "clubName": "Армейски спортен Таекуон-До клуб \"Тракия\" ",
+        "city": "гр. Пловдив",
+        "postcode": "4023",
+        "address": "бул. Източен №10",
+        "phoneNumberOne": "0888706008",
+        "phoneNumberTwo": "",
+        "email": "kdimitrov@yahoo.com",
+        "_id": "76595aaa-12ce-4a2f-9b55-cb959e3af185"
+    }
+}
