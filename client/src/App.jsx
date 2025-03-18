@@ -24,7 +24,7 @@ function App() {
     // const currentUrl = window.location.href;
     // console.log(currentUrl);
 
-    const [showRightMenu, setShowRightMenu] = useState(false);
+    const [showRightMenu, setShowRightMenu] = useState(true);
 
     const location = useLocation(); // Hook to get the current location
 
