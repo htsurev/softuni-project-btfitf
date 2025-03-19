@@ -21,6 +21,8 @@ import AdminClubsEdit from './components/admin/admin-clubs/AdminClubsEdit'
 import Theory from './components/education/Theory'
 import AdminNews from './components/admin/admin-news/AdminNews'
 import AdminNewsAddNew from './components/admin/admin-news/AdminNewsAddNew'
+import { UserContext } from './contexts/UserContext'
+import Register from './components/register/Register'
 
 function App() {
     // const currentUrl = window.location.href;
@@ -43,41 +45,45 @@ function App() {
     }, [location]); // This effect will run every time the location changes
 
     return (
-        <div className="flex flex-col min-h-screen">
-            <Header />
+        <UserContext.Provider value={{...authData, userLoginHandler}}>
 
-            <main className="flex-grow p-0  flex mt-16">
-                {/* Conditionally render right menu */}
-                {showRightMenu && (
-                    <AdminMenu />
-                )}
+            <div className="flex flex-col min-h-screen">
+                <Header />
 
-                {/* Main content */}
-                <div className={`flex-grow ${showRightMenu ? 'lg:w-3/4' : 'w-full'} mt-9`}>
-                    <Routes>
-                        <Route path='/' element={<Home />} />
-                        <Route path='/contact' element={<Contact />} />
-                        <Route path='/news' element={<News />} />
-                        <Route path='/about-us' element={<AboutUs />} />
-                        <Route path='/clubs' element={<Clubs />} />
-                        <Route path='/login' element={<Login onLogin={userLoginHandler} />} />
-                        <Route path='/*' element={<NotFound />} />
+                <main className="flex-grow p-0  flex mt-16">
+                    {/* Conditionally render right menu */}
+                    {showRightMenu && (
+                        <AdminMenu />
+                    )}
 
-                        {/* ADMIN PAGES */}
-                        <Route path='/admin/clubs' element={<AdminClubs />} />
-                        <Route path='/admin/news' element={<AdminNews />} />
-                        <Route path='/admin/news/create' element={<AdminNewsAddNew userEmail={authData.email} />} />
-                        <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
-                        <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
-                        <Route path='/education/history' element={<History />} />
-                        <Route path='/education/terminology' element={<Terminology />} />
-                        <Route path='/education/theory' element={<Theory />} />
-                    </Routes>
-                </div>
-            </main>
+                    {/* Main content */}
+                    <div className={`flex-grow ${showRightMenu ? 'lg:w-3/4' : 'w-full'} mt-9`}>
+                        <Routes>
+                            <Route path='/' element={<Home />} />
+                            <Route path='/contact' element={<Contact />} />
+                            <Route path='/news' element={<News />} />
+                            <Route path='/about-us' element={<AboutUs />} />
+                            <Route path='/clubs' element={<Clubs />} />
+                            <Route path='/login' element={<Login onLogin={userLoginHandler} />} />
+                            <Route path='/register' element={<Register />} />
+                            <Route path='/*' element={<NotFound />} />
 
-            <Footer />
-        </div>
+                            {/* ADMIN PAGES */}
+                            <Route path='/admin/clubs' element={<AdminClubs />} />
+                            <Route path='/admin/news' element={<AdminNews />} />
+                            <Route path='/admin/news/create' element={<AdminNewsAddNew />} />
+                            <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
+                            <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
+                            <Route path='/education/history' element={<History />} />
+                            <Route path='/education/terminology' element={<Terminology />} />
+                            <Route path='/education/theory' element={<Theory />} />
+                        </Routes>
+                    </div>
+                </main>
+
+                <Footer />
+            </div>
+        </UserContext.Provider>
     );
 
 }

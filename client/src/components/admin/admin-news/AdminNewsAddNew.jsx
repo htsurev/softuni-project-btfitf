@@ -1,12 +1,13 @@
-import { useNavigate } from "react-router";
-import adminServices from "../../../api/adminServices";
+// import { useNavigate } from "react-router";
+// import adminServices from "../../../api/adminServices";
+import { useContext } from "react";
+import { UserContext } from "../../../contexts/UserContext";
 
 
 
-export default function AdminNewsAddNew({
-    userEmail,
-}) {
-    const navigate = useNavigate();
+export default function AdminNewsAddNew() {
+    // const navigate = useNavigate();
+    const { email } = useContext(UserContext)
 
     const addNewsEventsForm = async (formData) => {
         const data = Object.fromEntries(formData);
@@ -25,7 +26,7 @@ export default function AdminNewsAddNew({
         data.eventDate = eventDate;
         data.postStatus = postStatus;
         data.publishedDate = formattedDate;
-        data.publishedBy = userEmail;
+        data.publishedBy = email;
 
         console.log(data);
 
