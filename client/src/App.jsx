@@ -29,11 +29,11 @@ function App() {
     // const currentUrl = window.location.href;
     // console.log(currentUrl);
 
-    const [authData, setauthData] = useState({});
+    const [authData, setAuthData] = useState({});
 
     const userLoginHandler = (resultData) => {
 
-        setauthData(resultData);
+        setAuthData(resultData);
     }
 
     const [showRightMenu, setShowRightMenu] = useState(true);
@@ -45,8 +45,12 @@ function App() {
         window.scrollTo(0, 0); // Scroll to top of the page
     }, [location]); // This effect will run every time the location changes
 
+    const userLogoutHandler = () => {
+        setAuthData({});
+    }
+
     return (
-        <UserContext.Provider value={{...authData, userLoginHandler}}>
+        <UserContext.Provider value={{ ...authData, userLoginHandler, userLogoutHandler }}>
 
             <div className="flex flex-col min-h-screen">
                 <Header />
