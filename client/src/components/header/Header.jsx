@@ -3,45 +3,36 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router';
 
-// const navigation = [
-//     { name: 'Начало', href: '/' },
-//     { name: 'За нас', href: '/about-us' },
-//     { name: 'Новини', href: '/news' },
-//     { name: 'Обучение', href: '/education' },
-//     { name: 'Календар', href: '/calendar' },
-//     { name: 'Контакти', href: '/contact' },
-// ]
-
 const navigation = [
-    { name: 'Начало', href: '/' },
-    { name: 'За нас', href: '/about-us' },
-    { name: 'Новини', href: '/news' },
+    { id: 1, name: 'Начало', href: '/' },
+    { id: 2, name: 'За нас', href: '/about-us' },
+    { id: 3, name: 'Новини', href: '/news' },
     {
+        id: 4,
         name: 'Обучение',
         href: '/education',
         submenu: [
-            { name: 'История', href: '/education/history' },
-            { name: 'Теория', href: '/education/theory' },
-            { name: 'Форми', href: '/education/forms' },
-            { name: 'Терминология', href: '/education/terminology' },
-            { name: 'Статий', href: '/education/articles' },
+            { id: 41, name: 'История', href: '/education/history' },
+            { id: 42, name: 'Теория', href: '/education/theory' },
+            { id: 43, name: 'Форми', href: '/education/forms' },
+            { id: 44, name: 'Терминология', href: '/education/terminology' },
+            { id: 45, name: 'Статии', href: '/education/articles' },
         ]
     },
-    { name: 'Календар', href: '/calendar' },
-    { name: 'Контакти', href: '/contact' },
+    { id: 5, name: 'Календар', href: '/calendar' },
+    { id: 6, name: 'Контакти', href: '/contact' },
 ]
 
 
 import {
     Popover,
     PopoverButton,
-    PopoverGroup,
     PopoverPanel,
-  } from '@headlessui/react'
+} from '@headlessui/react'
 
-  import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
-  
+
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -74,43 +65,41 @@ export default function Header() {
                     {navigation.map((menu) => (
 
                         menu.submenu
-                            ? <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-                                <Popover className="relative">
-                                    <PopoverButton className="flex items-center gap-x-0 text-sm/6 font-semibold text-slate-200">
-                                        {menu.name}
-                                        <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
-                                    </PopoverButton>
-                        
-                                    <PopoverPanel
-                                        transition
-                                        className="absolute top-full -left-32 z-10 mt-3 w-screen max-w-xs overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in text-center"
-                                    >
-                                        <div className="p-4">
-                                            {menu.submenu.map((item) => (
-                                                <div
-                                                key={item.name}
+                            ? <Popover key={menu.id} className="relative">
+                                <PopoverButton className="flex items-center gap-x-0 text-sm/6 font-semibold text-slate-200">
+                                    {menu.name}
+                                    <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
+                                </PopoverButton>
+
+                                <PopoverPanel
+                                    transition
+                                    className="absolute top-full -left-32 z-10 mt-3 w-screen max-w-xs overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in text-center"
+                                >
+                                    <div className="p-4">
+                                        {menu.submenu.map((item) => (
+                                            <div
+                                                key={item.id}
                                                 className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50"
-                                                >
+                                            >
                                                 <div className="flex-auto">
                                                     <Link to={item.href} className="block font-semibold text-gray-900">
                                                         {item.name}
                                                         <span className="absolute inset-0" />
                                                     </Link>
                                                 </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </PopoverPanel>
-                                </Popover>
-                            </PopoverGroup>
-                            : <Link key={menu.name} to={menu.href} className="text-sm/6 font-semibold text-slate-200">
+                                            </div>
+                                        ))}
+                                    </div>
+                                </PopoverPanel>
+                            </Popover>
+                            : <Link key={menu.id} to={menu.href} className="text-sm/6 font-semibold text-slate-200">
                                 {menu.name}
                             </Link>
 
                     ))}
                 </div>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <Link to="/login" className="text-sm/6 font-semibold text-slate-200">
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
+                    <Link to="/login" className="text-sm/6 font-semibold text-slate-200 ">
                         Log in <span aria-hidden="true">&rarr;</span>
                     </Link>
                 </div>
@@ -142,7 +131,7 @@ export default function Header() {
                             <div className="space-y-2 py-6">
                                 {navigation.map((item) => (
                                     <Link
-                                        key={item.name}
+                                        key={item.id}
                                         to={item.href}
                                         className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                                     >
@@ -152,7 +141,7 @@ export default function Header() {
                             </div>
                             <div className="py-6">
                                 <Link
-                                    href="/login"
+                                    to="/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                                 >
                                     Log in
@@ -165,34 +154,3 @@ export default function Header() {
         </header>
     );
 }
-
-
-
-
-
-
-
-
-
-// padashato menu
-// 1. obuchenie
-//     - teoriq
-//     - terminologiq
-//     - isotriq na TKD
-//     - formi
-//     - statii
-//     - 
-// admin menu
-// 1. novini
-//  - seminari - add to calendar
-//  - izpiti - add to calendar
-//  - sustezanie - add to calendar
-//  - general
- 
-// 2. klubove
-//     - add/edit/delete
-
-
-// 4. obuchenie - add,edit,delete
-
-// 5. 

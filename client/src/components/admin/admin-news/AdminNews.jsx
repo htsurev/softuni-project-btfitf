@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const posts = [
     {
         id: 1,
@@ -55,16 +57,19 @@ const posts = [
 ];
 
 
-export default function News() {
+export default function AdminNews() {
     return (
-        <div className="bg-white pb-24 sm:pb-32 pt-10">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Latest news</h2>
-                    <p className="mt-2 text-lg/8 text-gray-600">Learn how to grow your business with our expert advice.</p>
+        <div className="flex flex-col justify-center items-center p-8 text-white mt-10">
+            <div className="mx-auto max-w-7xl">
+                <div className="flex items-center w-full max-w-7xl mb-8 border-b border-gray-300 pb-10 space-x-4 px-8">
+                    <h1 className="text-3xl font-bold text-gray-700">Новини и Събития</h1>
+
+                    <Link to="/admin/news/create" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-lg shadow-md transition duration-300">
+                        + Добави
+                    </Link>
                 </div>
 
-                <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10  lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {posts.map((post) => (
                         <article key={post.id} className=" max-w-xl flex-col items-start justify-between bg-sky-50 rounded-xl px-4 py-4 min-h-[400px] "> {/* Fixed min-height */}
                             <div className="flex items-center gap-x-4 text-xs">
@@ -102,8 +107,27 @@ export default function News() {
                                 </div>
 
                                 {/* <a href="#" className="text-xs bg-blue-200 text-dark px-3 py-1 rounded-md hover:bg-blue-600 transition">...още</a> */}
-                               
+
                             </div>
+
+                            <div className="grid grid-cols-2 border-t pt-3 mt-5 border-gray-300 text-sm text-gray-700 divide-x divide-gray-300 h-12">
+                                <div className="flex items-center justify-center">
+                                    <a
+                                        href={`/admin/clubs/12e/edit`}
+                                        className="w-full h-full bg-gray-300 hover:bg-blue-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer flex items-center justify-center"
+                                    >
+                                        edit
+                                    </a>
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    <button
+                                        // onClick={() => onDeleteClubClickHandler(club)}
+                                        className="w-full h-full bg-red-300 hover:bg-red-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer">
+                                        delete
+                                    </button>
+                                </div>
+                            </div>
+
                         </article>
                     ))}
                 </div>

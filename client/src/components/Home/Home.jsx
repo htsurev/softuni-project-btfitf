@@ -1,17 +1,20 @@
 const managementBoard = [
     {
+        id: 1,
         name: 'Марио Богданов',
         role: 'Председател на УС на БФТ ITF',
         imageUrl:
             'https://itfbulgaria.com/wp-content/uploads/2022/03/mario_bogdanov_172x172.png',
     },
     {
+        id: 2,
         name: 'Костадин Димитров',
         role: 'Зам. председател на УС на БФТ ITF',
         imageUrl:
             'https://itfbulgaria.com/wp-content/uploads/2022/03/kostadin_dimitrov_172x172.png',
     },
     {
+        id: 3,
         name: 'Вергилий Ситнилски',
         role: 'Генерален секретар на БФТ ITF',
         imageUrl:
@@ -21,21 +24,25 @@ const managementBoard = [
 
 const chairmenAndMembersOfCommittees = [
     {
+        id: 1,
         committees: 'Съдийска комисия',
         chairmen: 'Няма',
         members: 'Желязко Гагов, Александър Русев',
     },
     {
+        id: 2,
         committees: 'Комисия по трансферите',
         chairmen: 'Тодор Козладеров',
         members: 'Няма',
     },
     {
+        id: 3,
         committees: 'WEB комисия',
         chairmen: 'Няма',
         members: 'Албена Малчева',
     },
     {
+        id: 4,
         committees: 'Комисия по състезанията и турнирите',
         chairmen: 'Калин Мирчев',
         members: 'Теодор Найденов',
@@ -62,7 +69,7 @@ const posts = [
         },
     },
     {
-        id: 1,
+        id: 2,
         title: 'Boost your conversion rate',
         href: '#',
         description:
@@ -79,7 +86,7 @@ const posts = [
         },
     },
     {
-        id: 1,
+        id: 3,
         title: 'Boost your conversion rate',
         href: '#',
         description:
@@ -258,7 +265,7 @@ export default function Home() {
                     {/* Management Board Below */}
                     <ul role="list" className="grid gap-x-8 gap-y-12 sm:grid-cols-3 sm:gap-y-16">
                         {managementBoard.map((person) => (
-                            <li key={person.committees}>
+                            <li key={person.id}>
                                 <div className="flex items-center gap-x-6">
                                     <img alt="" src={person.imageUrl} className="size-30 rounded-full" />
                                     <div>
@@ -316,9 +323,9 @@ export default function Home() {
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col gap-10 pt-5">
                     <dl className="divide-y divide-gray-100">
                         {chairmenAndMembersOfCommittees.map((person) => (
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" key={person.id}>
                                 <dt className="text-md font-medium text-gray-900">{person.committees}</dt>
-                                <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
                                     <div>
                                         <p className="text-sm font-semibold text-stone-800">Председател: <span className="text-stone-500">{person.chairmen}</span></p>
                                     </div>

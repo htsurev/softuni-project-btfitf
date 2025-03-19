@@ -1,56 +1,16 @@
-const tkdClubs = [
-    {
-        imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-        name: '"Фолкън"',
-        city: 'гр. Благоевград, 2700',
-        address: 'гр. Благоевград, 2700',
-        phoneNumber: '+359 897918913, 0895555162',
-        email: 'tkd_falcon@abv.bg',
-    },
-    {
-        imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/bylgarska-federacia-taekuondo_200px.png',
-        name: '"Калоян-Ладимекс"',
-        city: 'гр. Перник, 2300',
-        address: 'кв. "Твърди Ливади", бл. 42',
-        phoneNumber: '0899934909',
-        email: 'iv_62@abv.bg',
-    },
-    {
-        imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-        name: '"Фолкън"',
-        city: 'гр. Благоевград, 2700',
-        address: 'гр. Благоевград, 2700',
-        phoneNumber: '+359 897918913, 0895555162',
-        email: 'tkd_falcon@abv.bg',
-    },
-    {
-        imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/bylgarska-federacia-taekuondo_200px.png',
-        name: '"Калоян-Ладимекс"',
-        city: 'гр. Перник, 2300',
-        address: 'кв. "Твърди Ливади", бл. 42',
-        phoneNumber: '0899934909',
-        email: 'iv_62@abv.bg',
-    },
-    {
-        imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-        name: '"Фолкън"',
-        city: 'гр. Благоевград, 2700',
-        address: 'гр. Благоевград, 2700',
-        phoneNumber: '+359 897918913, 0895555162',
-        email: 'tkd_falcon@abv.bg',
-    },
-    {
-        imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/bylgarska-federacia-taekuondo_200px.png',
-        name: '"Калоян-Ладимекс"',
-        city: 'гр. Перник, 2300',
-        address: 'кв. "Твърди Ливади", бл. 42',
-        phoneNumber: '0899934909',
-        email: 'iv_62@abv.bg',
-    },
+import { useEffect, useState } from "react";
+import adminServices from "../../api/adminServices";
 
-];
 
 export default function AboutUs() {
+    const [tkdClubs, setTkdClubs] = useState([]);
+        useEffect(() => {
+            adminServices.getAll()
+                .then(result => {
+                    setTkdClubs(result);
+                })
+        }, []);
+
     return (
         <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:pt-16 sm:pb-0 lg:overflow-visible lg:px-0">
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
@@ -105,26 +65,12 @@ export default function AboutUs() {
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 w-full max-w-7xl justify-center place-items-center ">
 
                     {tkdClubs.map(club => (
-                        <div key={club.name} className="p-0 text-center flex flex-col items-center">
+                        <div key={club._id} className="p-0 text-center flex flex-col items-center">
                             <img
                                 src={club.imageUrl}
                                 alt="Contact"
                                 className="rounded-full mb-4 w-30"
                             />
-                            {/* <h4 className="font-semibold text-gray-900 mb-3">{club.name}</h4>
-                            <p className="text-gray-700 mb-2">
-                                {club.city}
-                            </p>
-                            <p className="text-gray-700 mb-2">
-                                {club.address}
-                            </p>
-                            <p className="text-gray-700 mb-2">
-                                {club.phoneNumber}
-                            </p>
-                            <p className="text-gray-700 mb-3">
-                                {club.email}
-                            </p> */}
-
                         </div>
                     ))}
                 </div>
