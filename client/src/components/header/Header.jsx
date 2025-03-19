@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { UserContext } from '../../contexts/UserContext';
 
 import {
     Popover,
@@ -9,7 +12,6 @@ import {
     PopoverPanel,
 } from '@headlessui/react'
 
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
     { id: 1, name: 'Начало', href: '/' },
@@ -37,6 +39,8 @@ export default function Header() {
     const closeMenu = () => {
         setMobileMenuOpen(false);
     };
+
+    const { email } = useContext(UserContext);
 
 
     return (
@@ -99,17 +103,26 @@ export default function Header() {
 
                     ))}
                 </div>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
-                    <Link to="/login" className="text-sm/6 font-semibold text-slate-200 ">
-                        Log in <span aria-hidden="true">&rarr;</span>
-                    </Link>
-                </div>
 
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
-                    <Link to="/logout" className="text-sm/6 font-semibold text-slate-200 ">
-                        Log out <span aria-hidden="true">&larr;</span>
-                    </Link>
-                </div>
+                {email
+                    ? (
+                        <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
+                            <Link to="/logout" className="text-sm/6 font-semibold text-slate-200 ">
+                                Log out <span aria-hidden="true">&larr;</span>
+                            </Link>
+                        </div>
+                    )
+                    : (
+                        <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
+                            <Link to="/login" className="text-sm/6 font-semibold text-slate-200 ">
+                                Log in <span aria-hidden="true">&rarr;</span>
+                            </Link>
+                        </div>
+                    )
+                }
+
+
+
             </nav>
 
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">

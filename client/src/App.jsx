@@ -26,24 +26,17 @@ import Register from './components/register/Register'
 import Logout from './components/logout/Logout'
 
 function App() {
-    // const currentUrl = window.location.href;
-    // console.log(currentUrl);
-
     const [authData, setAuthData] = useState({});
+    const isLogged = authData.email;
+    const location = useLocation();
 
     const userLoginHandler = (resultData) => {
-
         setAuthData(resultData);
     }
 
-    const [showRightMenu, setShowRightMenu] = useState(true);
-
-    const location = useLocation();
-
-    // Scroll to top whenever the location changes (i.e., when the route changes)
     useEffect(() => {
-        window.scrollTo(0, 0); // Scroll to top of the page
-    }, [location]); // This effect will run every time the location changes
+        window.scrollTo(0, 0);
+    }, [location]);
 
     const userLogoutHandler = () => {
         setAuthData({});
@@ -55,14 +48,12 @@ function App() {
             <div className="flex flex-col min-h-screen">
                 <Header />
 
-                <main className="flex-grow p-0  flex mt-16">
+                <main className="flex-grow p-0 flex mt-16">
                     {/* Conditionally render right menu */}
-                    {showRightMenu && (
-                        <AdminMenu />
-                    )}
+                    {isLogged && <AdminMenu />}
 
                     {/* Main content */}
-                    <div className={`flex-grow ${showRightMenu ? 'lg:w-3/4' : 'w-full'} mt-9`}>
+                    <div className={`flex-grow ${isLogged ? 'lg:w-3/4' : 'w-full'} mt-9`}>
                         <Routes>
                             <Route path='/' element={<Home />} />
                             <Route path='/contact' element={<Contact />} />
@@ -75,17 +66,24 @@ function App() {
                             <Route path='/*' element={<NotFound />} />
 
                             {/* ADMIN PAGES */}
-                            <Route path='/admin/clubs' element={<AdminClubs />} />
-                            <Route path='/admin/news' element={<AdminNews />} />
-                            <Route path='/admin/news/create' element={<AdminNewsAddNew />} />
-                            <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
-                            <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
-                            <Route path='/education/history' element={<History />} />
-                            <Route path='/education/terminology' element={<Terminology />} />
-                            <Route path='/education/theory' element={<Theory />} />
+                            {isLogged && (
+                                <>
+                                    <Route path='/admin/clubs' element={<AdminClubs />} />
+                                    <Route path='/admin/news' element={<AdminNews />} />
+                                    <Route path='/admin/news/create' element={<AdminNewsAddNew />} />
+                                    <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
+                                    <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
+                                    <Route path='/education/history' element={<History />} />
+                                    <Route path='/education/terminology' element={<Terminology />} />
+                                    <Route path='/education/theory' element={<Theory />} />
+                                </>
+                            )}
+
+
                         </Routes>
                     </div>
                 </main>
+
 
                 <Footer />
             </div>
