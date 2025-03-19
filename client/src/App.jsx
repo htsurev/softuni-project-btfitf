@@ -1,11 +1,11 @@
-import { Route, Routes, useLocation } from 'react-router'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import Home from './components/Home/Home'
 import Login from './components/login/Login'
-import Footer from './components/Footer/Footer'
+import Footer from './components/footer/Footer'
 import Contact from './components/Contact/Contact'
-import Header from './components/Header/Header'
+import Header from './components/header/Header'
 import News from './components/news/News'
 import AboutUs from './components/about-us/AboutUs'
 import Clubs from './components/clubs/Clubs'
@@ -23,6 +23,7 @@ import AdminNews from './components/admin/admin-news/AdminNews'
 import AdminNewsAddNew from './components/admin/admin-news/AdminNewsAddNew'
 import { UserContext } from './contexts/UserContext'
 import Register from './components/register/Register'
+import Logout from './components/logout/Logout'
 
 function App() {
     // const currentUrl = window.location.href;
@@ -65,6 +66,7 @@ function App() {
                             <Route path='/about-us' element={<AboutUs />} />
                             <Route path='/clubs' element={<Clubs />} />
                             <Route path='/login' element={<Login onLogin={userLoginHandler} />} />
+                            <Route path='/logout' element={<Logout />} />
                             <Route path='/register' element={<Register />} />
                             <Route path='/*' element={<NotFound />} />
 

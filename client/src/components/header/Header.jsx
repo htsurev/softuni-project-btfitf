@@ -1,7 +1,15 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link } from 'react-router';
+
+import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+} from '@headlessui/react'
+
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
     { id: 1, name: 'Начало', href: '/' },
@@ -21,21 +29,14 @@ const navigation = [
     },
     { id: 5, name: 'Календар', href: '/calendar' },
     { id: 6, name: 'Контакти', href: '/contact' },
-]
-
-
-import {
-    Popover,
-    PopoverButton,
-    PopoverPanel,
-} from '@headlessui/react'
-
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-
-
+];
 
 export default function Header() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const closeMenu = () => {
+        setMobileMenuOpen(false);
+    };
 
 
     return (
@@ -61,12 +62,12 @@ export default function Header() {
                         <Bars3Icon aria-hidden="true" className="size-6" />
                     </button>
                 </div>
-                <div className="hidden lg:flex lg:gap-x-12">
+                <div className="hidden lg:flex lg:gap-x-3">
                     {navigation.map((menu) => (
 
                         menu.submenu
                             ? <Popover key={menu.id} className="relative">
-                                <PopoverButton className="flex items-center gap-x-0 text-sm/6 font-semibold text-slate-200">
+                                <PopoverButton className="flex items-center gap-x-0 text-sm/6 font-semibold text-slate-200 border border-gray-700 rounded-lg px-3 py-1 hover:bg-gray-600 transition duration-500">
                                     {menu.name}
                                     <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
                                 </PopoverButton>
@@ -92,7 +93,7 @@ export default function Header() {
                                     </div>
                                 </PopoverPanel>
                             </Popover>
-                            : <Link key={menu.id} to={menu.href} className="text-sm/6 font-semibold text-slate-200">
+                            : <Link key={menu.id} to={menu.href} className="text-sm/6 font-semibold text-slate-200 border border-gray-700 rounded-lg px-3 py-1 hover:bg-gray-600 transition duration-500">
                                 {menu.name}
                             </Link>
 
@@ -103,13 +104,19 @@ export default function Header() {
                         Log in <span aria-hidden="true">&rarr;</span>
                     </Link>
                 </div>
+
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
+                    <Link to="/logout" className="text-sm/6 font-semibold text-slate-200 ">
+                        Log out <span aria-hidden="true">&larr;</span>
+                    </Link>
+                </div>
             </nav>
 
             <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
                 <div className="fixed inset-0 z-50" />
                 <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
-                        <Link href="#" className="-m-1.5 p-1.5">
+                        <Link to="/" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
                             <img
                                 alt=""
@@ -130,14 +137,48 @@ export default function Header() {
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
                                 {navigation.map((item) => (
-                                    <Link
-                                        key={item.id}
-                                        to={item.href}
-                                        className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                                    >
-                                        {item.name}
-                                    </Link>
+                                    item.submenu
+                                        ? (
+                                            <Popover key={item.id} className="relative right-3">
+                                                <PopoverButton className="flex items-center gap-x-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 w-full">
+                                                    {item.name}
+                                                    <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
+                                                </PopoverButton>
+
+                                                <PopoverPanel
+                                                    transition
+                                                    className="absolute top-full -left-0 z-10 mt-3 w-screen max-w-xs overflow-hidden rounded-3xl bg-white ring-1 shadow-lg ring-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in text-center"
+                                                >
+                                                    <div className="p-4">
+                                                        {item.submenu.map((subItem) => (
+                                                            <div
+                                                                key={subItem.id}
+                                                                className="group relative justify-items-start gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50"
+                                                            >
+                                                                <div className="flex-auto">
+                                                                    <Link to={subItem.href} onClick={closeMenu} className="block font-semibold text-gray-900">
+                                                                        {subItem.name}
+                                                                        <span className="absolute inset-0" />
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </PopoverPanel>
+                                            </Popover>
+                                        )
+                                        : (
+                                            <Link
+                                                key={item.id}
+                                                to={item.href}
+                                                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50 w-full"
+                                                onClick={closeMenu}
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        )
                                 ))}
+
                             </div>
                             <div className="py-6">
                                 <Link
