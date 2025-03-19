@@ -3,7 +3,9 @@ import adminServices from "../../../api/adminServices";
 
 
 
-export default function AdminNewsAddNew() {
+export default function AdminNewsAddNew({
+    userEmail,
+}) {
     const navigate = useNavigate();
 
     const addNewsEventsForm = async (formData) => {
@@ -23,6 +25,7 @@ export default function AdminNewsAddNew() {
         data.eventDate = eventDate;
         data.postStatus = postStatus;
         data.publishedDate = formattedDate;
+        data.publishedBy = userEmail;
 
         console.log(data);
 

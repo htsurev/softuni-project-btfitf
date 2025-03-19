@@ -26,12 +26,11 @@ function App() {
     // const currentUrl = window.location.href;
     // console.log(currentUrl);
 
-    const [email, setEmail] = useState('');
+    const [authData, setauthData] = useState({});
 
-    const userLoginHandler = (authData) => {
-        console.log(authData);
-        
-        setEmail(authData.email);
+    const userLoginHandler = (resultData) => {
+
+        setauthData(resultData);
     }
 
     const [showRightMenu, setShowRightMenu] = useState(true);
@@ -67,7 +66,7 @@ function App() {
                         {/* ADMIN PAGES */}
                         <Route path='/admin/clubs' element={<AdminClubs />} />
                         <Route path='/admin/news' element={<AdminNews />} />
-                        <Route path='/admin/news/create' element={<AdminNewsAddNew />} />
+                        <Route path='/admin/news/create' element={<AdminNewsAddNew userEmail={authData.email} />} />
                         <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
                         <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
                         <Route path='/education/history' element={<History />} />

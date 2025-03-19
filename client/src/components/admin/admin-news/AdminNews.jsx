@@ -59,7 +59,7 @@ const posts = [
 
 export default function AdminNews() {
     return (
-        <div className="flex flex-col justify-center items-center p-8 text-white mt-10">
+        <div className="flex flex-col justify-center items-center p-8 mt-10">
             <div className="mx-auto max-w-7xl">
                 <div className="flex items-center w-full max-w-7xl mb-8 border-b border-gray-300 pb-10 space-x-4 px-8">
                     <h1 className="text-3xl font-bold text-gray-700">Новини и Събития</h1>
@@ -105,7 +105,8 @@ export default function AdminNews() {
                                 <div className="text-sm/6">
                                     <p className="text-gray-600 text-xs">публикувано на {post.publishedDate}</p>
                                 </div>
-
+                                    
+                                <p className="text-xs bg-blue-100 text-dark px-3 py-1 rounded-md hover:bg-blue-400 hover:text-white transition"><span className="text-dark-800 mr-2">от</span> htsurev@gmail.com</p>
                                 {/* <a href="#" className="text-xs bg-blue-200 text-dark px-3 py-1 rounded-md hover:bg-blue-600 transition">...още</a> */}
 
                             </div>
