@@ -50,6 +50,13 @@ const chairmenAndMembersOfCommittees = [
 
 ];
 
+const stats = [
+    { id: 1, name: 'Лицензирани школи', value: '32' },
+    { id: 2, name: 'Професионални ITF треньори', value: '80 +' },
+    { id: 3, name: 'Състезатели с черен колан', value: '679' },
+    { id: 4, name: 'Общо състезатели', value: '5123' },
+]
+
 const posts = [
     {
         id: 1,
@@ -146,10 +153,32 @@ export default function Home() {
             </section>
 
 
+            {/* Statistic */}
+            <div className="bg-gray-300 py-24 sm:py-10">
+                <h1 className="text-center text-4xl font-bold tracking-tight text-pretty text-gray-900 sm:text-3xl mb-12">
+                    Българска федерация по Таекуондо ITF
+                </h1>
+
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-4">
+                        {stats.map((stat) => (
+                            <div key={stat.id} className="mx-auto flex max-w-xs flex-col gap-y-4 p-6 bg-white rounded-lg shadow-lg">
+                                <dt className="text-xl font-semibold text-gray-600">{stat.name}</dt>
+                                <dd className="order-first text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                                    {stat.value}
+                                </dd>
+                            </div>
+                        ))}
+                    </dl>
+                </div>
+            </div>
+
+
+
 
             {/* Latest NEWS */}
-            <div className="bg-white py-24 sm:pb-32 ">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8"> 
+            <div className="bg-white py-14 sm:pb-32 ">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl text-center border-b border-gray-200 ">
                         <h2 className="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Последни новини</h2>
                         <div className="hidden sm:my-5 sm:flex sm:justify-center">
@@ -309,7 +338,7 @@ export default function Home() {
                 </div>
             </div> */}
 
-            <div className="bg-white pt-10 sm:pt-10 sm:pb-30 ">
+            <div className="bg-white pt-10 sm:pt-10 sm:pb-20 ">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col gap-10 border-t border-gray-200 pt-5">
                     <div className="max-w-xl">
                         <h2 className="text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">

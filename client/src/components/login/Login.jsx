@@ -10,14 +10,22 @@ export default function Login() {
     const { login } = useLogin();
 
     const loginHandler = async (_, formData) => {
-        const values = Object.fromEntries(formData);
+        try {
+            const values = Object.fromEntries(formData);
 
-        const authData = await login(values.email, values.password);
+            const authData = await login(values.email, values.password);
 
-        userLoginHandler(authData)
+            userLoginHandler(authData);
 
-        navigate('/');
-    }
+            navigate('/admin/profile');
+            return;
+        } catch (error) {
+            console.error("Login failed:", error);
+            alert("Грешен имейл или парола. Опитайте отново.");
+
+            return { error: true };
+        }
+    };
 
     const [_, loginFormAction, isPending] = useActionState(loginHandler, { email: '', password: '' });
 

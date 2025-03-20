@@ -1,18 +1,12 @@
-import { useEffect, useState } from "react";
-import adminServices from "../../api/adminServices";
+
+import { useGetAll } from "../../api/adminApi";
 
 import { ImLocation } from "react-icons/im";
 import { MdPhone, MdEmail } from "react-icons/md";
 
 
 export default function Clubs() {
-    const [tkdClubs, setTkdClubs] = useState([]);
-    useEffect(() => {
-        adminServices.getAll()
-            .then(result => {
-                setTkdClubs(result);
-            })
-    }, []);
+    const { getAll } = useGetAll("clubs");
 
     return (
         <div className="flex flex-col justify-center items-center p-8">
@@ -24,7 +18,7 @@ export default function Clubs() {
 
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-7xl justify-center place-items-center ">
 
-                {tkdClubs.map(club => (
+                {getAll.map(club => (
                     <div key={club._id} className="rounded-2xl p-6 text-center shadow-xl flex flex-col items-center shadow-stone-500/50 inset-shadow-sm inset-shadow-stone-500 bg-gray-200">
                         <img
                             src={club.imageUrl}

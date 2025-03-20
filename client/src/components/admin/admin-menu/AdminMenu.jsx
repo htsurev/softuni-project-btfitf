@@ -1,17 +1,21 @@
 import { FaRegUser } from "react-icons/fa";
 import { Link } from "react-router";
+import useAuth from "../../../hooks/useAuth";
 
 export default function AdminMenu() {
+    const { email } = useAuth();
+
     return (
         <div className="hidden lg:block lg:w-1/6 bg-gray-200 p-0 rounded-lg shadow-md mt-9 px-0 ">
             <div className="hidden lg:flex lg:flex-col lg:w-1/6 bg-gray-200 pl-3 fixed top-30 left-0 ">
 
                 {/* User Section */}
                 <div className="flex flex-col items-start mb-5 px-0">
-                    <a href="/account" className="flex items-center space-x-2 text-gray-800 hover:text-blue-600 font-semibold transition duration-300 mb-3">
+                    <Link to="/admin/profile" className="flex items-center space-x-2 text-gray-800 hover:text-blue-600 font-semibold transition duration-300 mb-3">
                         <FaRegUser />
-                        <span>Вергилий Ситнилски</span>
-                    </a>
+                        
+                        <span>{email}</span>
+                    </Link>
                     <hr className="w-full border-t-2 border-gray-300" />
                 </div>
 

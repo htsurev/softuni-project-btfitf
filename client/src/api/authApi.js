@@ -6,28 +6,24 @@ import { UserContext } from "../contexts/UserContext";
 const baseUrl = 'http://localhost:3030/users';
 
 export const useLogin = () => {
-    // const abortRef = useRef(new AbortController());
-
     const login = async (email, password) => {
-        const result = await request.post(
-            `${baseUrl}/login`,
-            { email, password },
-            // { signal: abortRef.current.signal }
-        );
+        try {
+            const result = await request.post(
+                `${baseUrl}/login`,
+                { email, password },
+            );
+            return result;
+            
 
-        return result;
-    }
+        } catch (error) {
+            console.error("Login error:", error);
+            throw error;
+        }
+    };
 
-    // useEffect(() => {
-    //     const abortControler = abortRef.current;
+    return { login };
+};
 
-    //     return () => abortControler.abort();
-    // }, []);
-
-    return {
-        login,
-    }
-}
 
 export const useRegister = () => {
     const register = (email, password) =>
@@ -45,7 +41,7 @@ export const useLogout = () => {
         if (!accessToken) {
             return;
         }
-        
+
         const options = {
             headers: {
                 'X-Authorization': accessToken,

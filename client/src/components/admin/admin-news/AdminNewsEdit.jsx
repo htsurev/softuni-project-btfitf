@@ -1,16 +1,25 @@
-import { useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useEdit, useGetOne } from "../../../api/adminApi";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/UserContext";
-import { useCreate } from "../../../api/adminApi";
-import { useNavigate } from "react-router";
 
-export default function AdminNewsAddNew() {
+export default function AdminNewsEdit() {
     const navigate = useNavigate();
+    const { newsId } = useParams();
+    const { getOne } = useGetOne("news", newsId);
+    const { edit } = useEdit("news");
+
+
     const { email } = useContext(UserContext);
-    const [newsType, setNewsType] = useState("news");
+    const [newsType, setNewsType] = useState(getOne.newsType);
 
-    const { create } = useCreate("news");
+    useEffect(() => {
+        if (getOne) {
+            setNewsType(getOne.newsType);
+        }
+    }, [getOne]);
 
-    const addNewsEventsForm = async (formData) => {
+    const editNewsForm = async (formData) => {
         const data = Object.fromEntries(formData);
 
         const todaysDate = new Date();
@@ -22,9 +31,7 @@ export default function AdminNewsAddNew() {
         data.publishedDate = formattedDate;
         data.publishedBy = email;
 
-        await create(data);       
-
-        // setNewsType("news");
+        await edit(newsId, data)
 
         navigate('/admin/news')
     };
@@ -36,10 +43,10 @@ export default function AdminNewsAddNew() {
 
     return (
         <div className="flex items-center justify-center min-h-screen py-10">
-            <form action={addNewsEventsForm} className="w-full max-w-2xl">
+            <form action={editNewsForm} className="w-full max-w-2xl">
                 <div className="space-y-12">
                     <div className="border-b border-gray-900/10 pb-12">
-                        <h2 className="text-2xl font-semibold text-gray-900">Добавяне на</h2>
+                        <h2 className="text-2xl font-semibold text-gray-900">Редактиране на</h2>
                         <p className="mt-2 text-sm text-gray-600 border-b border-gray-900/10">* задължителни полета</p>
 
                         <div className="mt-6 flex items-center gap-x-6">
@@ -103,6 +110,7 @@ export default function AdminNewsAddNew() {
                                         name="imageUrl"
                                         type="text"
                                         placeholder="https://..."
+                                        defaultValue={getOne.imageUrl}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                     />
                                 </div>
@@ -119,6 +127,7 @@ export default function AdminNewsAddNew() {
                                         name="title"
                                         type="text"
                                         placeholder="Заглавие"
+                                        defaultValue={getOne.title}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                     />
                                 </div>
@@ -134,6 +143,7 @@ export default function AdminNewsAddNew() {
                                         id="description"
                                         name="description"
                                         placeholder="Описание"
+                                        defaultValue={getOne.description}
                                         className="block w-full h-50 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                     />
                                 </div>
@@ -152,6 +162,7 @@ export default function AdminNewsAddNew() {
                                                 name="eventLocation"
                                                 type="text"
                                                 placeholder="Град, Държава"
+                                                defaultValue={getOne.eventLocation}
                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                             />
                                         </div>
@@ -166,6 +177,7 @@ export default function AdminNewsAddNew() {
                                                 id="eventDate"
                                                 name="eventDate"
                                                 type="date"
+                                                defaultValue={getOne.eventDate}
                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                             />
                                         </div>
@@ -192,7 +204,7 @@ export default function AdminNewsAddNew() {
                             type="submit"
                             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                            Добави
+                            редактирай
                         </button>
                     </div>
 

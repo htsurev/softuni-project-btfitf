@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router";
-import adminServices from "../../../api/adminServices";
+import { useCreate } from "../../../api/adminApi";
 
 export default function AdminClubsAddNew() {
     const navigate = useNavigate();
 
+    const { create } = useCreate("clubs");
+
     const addClubForm = async (formData) => {
         const data = Object.fromEntries(formData);
 
-        await adminServices.create(data);
+        await create(data);
 
         navigate('/admin/clubs')
 

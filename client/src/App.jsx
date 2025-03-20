@@ -24,6 +24,9 @@ import AdminNewsAddNew from './components/admin/admin-news/AdminNewsAddNew'
 import { UserContext } from './contexts/UserContext'
 import Register from './components/register/Register'
 import Logout from './components/logout/Logout'
+import AdminProfile from './components/admin/admin-profile/AdminProfile'
+import AdminProfileEdit from './components/admin/admin-profile/AdminProfileEdit'
+import AdminNewsEdit from './components/admin/admin-news/AdminNewsEdit'
 
 function App() {
     const [authData, setAuthData] = useState({});
@@ -68,9 +71,12 @@ function App() {
                             {/* ADMIN PAGES */}
                             {isLogged && (
                                 <>
+                                    <Route path='/admin/profile' element={<AdminProfile />} />
+                                    <Route path='/admin/profile/edit' element={<AdminProfileEdit />} />
                                     <Route path='/admin/clubs' element={<AdminClubs />} />
                                     <Route path='/admin/news' element={<AdminNews />} />
                                     <Route path='/admin/news/create' element={<AdminNewsAddNew />} />
+                                    <Route path='/admin/news/:newsId/edit' element={<AdminNewsEdit />} />
                                     <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
                                     <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
                                     <Route path='/education/history' element={<History />} />

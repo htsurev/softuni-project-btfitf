@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
-import adminServices from "../../api/adminServices";
+import { Link } from "react-router";
+import { useGetAll } from "../../api/adminApi";
 
 
 export default function AboutUs() {
-    const [tkdClubs, setTkdClubs] = useState([]);
-        useEffect(() => {
-            adminServices.getAll()
-                .then(result => {
-                    setTkdClubs(result);
-                })
-        }, []);
+    const { getAll } = useGetAll("clubs");
 
     return (
         <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:pt-16 sm:pb-0 lg:overflow-visible lg:px-0">
@@ -64,7 +58,7 @@ export default function AboutUs() {
 
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 w-full max-w-7xl justify-center place-items-center ">
 
-                    {tkdClubs.map(club => (
+                    {getAll.map(club => (
                         <div key={club._id} className="p-0 text-center flex flex-col items-center">
                             <img
                                 src={club.imageUrl}
@@ -76,9 +70,9 @@ export default function AboutUs() {
                 </div>
 
                 <div className="mt-10 mb-15">
-                    <a href="/clubs" className="bg-green-600 hover:bg-green-900 text-white font-semibold py-2 px-8 text-lg rounded transition duration-300">
+                    <Link to="/clubs" className="bg-green-600 hover:bg-green-900 text-white font-semibold py-2 px-8 text-lg rounded transition duration-300">
                         Виж всички
-                    </a>
+                    </Link>
                 </div>
 
             </div>

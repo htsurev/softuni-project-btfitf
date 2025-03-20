@@ -1,23 +1,18 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import adminServices from "../../../api/adminServices";
+import { useEdit, useGetOne } from "../../../api/adminApi";
 
 export default function AdminClubsEdit() {
     const navigate = useNavigate();
     const { clubId } = useParams();
-    const [club, setClub] = useState({});
-
-    useEffect(() => {
-        adminServices.getOne(clubId)
-            .then(setClub)
-    }, [clubId]);
+    const { getOne: club } = useGetOne("clubs", clubId);
+    const { edit } = useEdit("clubs");
 
     const editClubForm = async (formData) => {
         const data = Object.fromEntries(formData);
 
-        await adminServices.edit(clubId, data);
+        await edit(clubId, data);
 
-        navigate('/admin/clubs')
+        navigate('/admin/clubs');
 
     };
 

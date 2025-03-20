@@ -1,81 +1,17 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import adminServices from "../../../api/adminServices";
-
-// const tkdClubs = [
-//     {
-//         imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-//         name: '"Фолкън"',
-//         city: 'гр. Благоевград, 2700',
-//         address: 'гр. Благоевград, 2700',
-//         phoneNumber: '+359 897918913, 0895555162',
-//         email: 'tkd_falcon@abv.bg',
-//     },
-//     {
-//         imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/bylgarska-federacia-taekuondo_200px.png',
-//         name: '"Калоян-Ладимекс"',
-//         city: 'гр. Перник, 2300',
-//         address: 'кв. "Твърди Ливади", бл. 42',
-//         phoneNumber: '0899934909',
-//         email: 'iv_62@abv.bg',
-//     },
-//     {
-//         imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-//         name: '"Фолкън"',
-//         city: 'гр. Благоевград, 2700',
-//         address: 'гр. Благоевград, 2700',
-//         phoneNumber: '+359 897918913, 0895555162',
-//         email: 'tkd_falcon@abv.bg',
-//     },
-//     {
-//         imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/bylgarska-federacia-taekuondo_200px.png',
-//         name: '"Калоян-Ладимекс"',
-//         city: 'гр. Перник, 2300',
-//         address: 'кв. "Твърди Ливади", бл. 42',
-//         phoneNumber: '0899934909',
-//         email: 'iv_62@abv.bg',
-//     },
-//     {
-//         imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-//         name: '"Фолкън"',
-//         city: 'гр. Благоевград, 2700',
-//         address: 'гр. Благоевград, 2700',
-//         phoneNumber: '+359 897918913, 0895555162',
-//         email: 'tkd_falcon@abv.bg',
-//     },
-//     {
-//         imageUrl: 'https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg',
-//         name: '"Фолкън"',
-//         city: 'гр. Благоевград, 2700',
-//         address: 'гр. Благоевград, 2700',
-//         phoneNumber: '+359 897918913, 0895555162',
-//         email: 'tkd_falcon@abv.bg',
-//     },
-// ];
+import { useDelete, useGetAll } from "../../../api/adminApi";
 
 export default function AdminClubs() {
-
-    const [tkdClubs, setTkdClubs] = useState([]);
-    useEffect(() => {
-        adminServices.getAll()
-            .then(result => {
-                setTkdClubs(result);
-            })
-    }, []);
-
+    const { getAll } = useGetAll("clubs");
+    const { deleteData } = useDelete("clubs");
+    
     const onDeleteClubClickHandler = async (club) => {
         const hasConfirm = confirm(`Изтриване на клуб ${club.clubName}`);
-
         if (!hasConfirm) {
             return;
         }
 
-        await adminServices.delete(club._id);
-
-        setTkdClubs((prevClubs) =>
-            prevClubs.filter((item) => item._id !== club._id)
-        );
-
+        await deleteData(club._id);
     }
 
     return (
@@ -90,7 +26,7 @@ export default function AdminClubs() {
 
 
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-7xl justify-center">
-                {tkdClubs.map(club => (
+                {getAll.map(club => (
                     <div key={club._id} className="bg-white rounded-xl p-4 text-left shadow-md flex flex-col justify-between h-full">
 
                         <div className="flex justify-between items-center mb-4">
@@ -112,12 +48,12 @@ export default function AdminClubs() {
 
                         <div className="grid grid-cols-2 border-t pt-3 border-gray-300 text-sm text-gray-700 divide-x divide-gray-300 h-12">
                             <div className="flex items-center justify-center">
-                                <a
-                                    href={`/admin/clubs/${club._id}/edit`}
+                                <Link
+                                    to={`/admin/clubs/${club._id}/edit`}
                                     className="w-full h-full bg-gray-300 hover:bg-blue-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer flex items-center justify-center"
                                 >
                                     edit
-                                </a>
+                                </Link>
                             </div>
                             <div className="flex items-center justify-center">
                                 <button
