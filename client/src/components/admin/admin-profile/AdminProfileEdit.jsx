@@ -3,10 +3,8 @@ import useAuth from "../../../hooks/useAuth";
 import { FaRegUser } from "react-icons/fa";
 
 export default function AdminProfileEdit() {
-    const { email, fullName, _id } = useAuth();
-
-    console.log(_id);
-    
+    const { email, fullName } = useAuth();
+   
 
     return (
         <div className="profile-container p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto my-8">
@@ -20,13 +18,13 @@ export default function AdminProfileEdit() {
                 </div>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" >
                 <div>
-                    <label htmlFor="name" className="block text-lg font-medium text-gray-700">Име *</label>
+                    <label htmlFor="fullName" className="block text-lg font-medium text-gray-700">Име *</label>
                     <input
                         type="text"
-                        id="name"
-                        name="name"
+                        id="fullName"
+                        name="fullName"
                         placeholder="John Doe"
                         defaultValue={fullName}
                         required
@@ -53,7 +51,7 @@ export default function AdminProfileEdit() {
                         Отказ
                     </button>
                     <div className="border-l border-gray-300 h-8"></div>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600 transition duration-300 text-sm">
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600 transition duration-300 text-sm">
                         Запази промените
                     </button>
                 </div>

@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { useDelete, useGetAll } from "../../../api/adminApi";
 
 export default function AdminClubs() {
-    const { getAll } = useGetAll("clubs");
+    const { getAll, refreshData } = useGetAll("clubs");
     const { deleteData } = useDelete("clubs");
     
     const onDeleteClubClickHandler = async (club) => {
@@ -12,6 +12,7 @@ export default function AdminClubs() {
         }
 
         await deleteData(club._id);
+        refreshData();
     }
 
     return (
@@ -24,7 +25,9 @@ export default function AdminClubs() {
                 </Link>
             </div>
 
-
+            {getAll.length === 0 ? (
+                    <p className="text-left text-gray-500 col-span-full">Няма налични новини и събития.</p>
+                ) : (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-7xl justify-center">
                 {getAll.map(club => (
                     <div key={club._id} className="bg-white rounded-xl p-4 text-left shadow-md flex flex-col justify-between h-full">
@@ -67,6 +70,7 @@ export default function AdminClubs() {
                     </div>
                 ))}
             </div>
+            )}
         </div>
     );
 }

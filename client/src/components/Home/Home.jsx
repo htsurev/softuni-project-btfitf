@@ -1,3 +1,6 @@
+import { Link } from "react-router";
+import { useLatestData } from "../../api/adminApi";
+
 const managementBoard = [
     {
         id: 1,
@@ -18,7 +21,7 @@ const managementBoard = [
         name: 'Вергилий Ситнилски',
         role: 'Генерален секретар на БФТ ITF',
         imageUrl:
-            'https://itfbulgaria.com/wp-content/uploads/2022/10/57190313_2059616984338687_7186529551013380096_n-300x300.png',
+            'https://itfbulgaria.com/wp-content/uploads/2022/03/vergilii_sitnilski_172x172.png',
     },
 ];
 
@@ -57,62 +60,37 @@ const stats = [
     { id: 4, name: 'Общо състезатели', value: '5123' },
 ]
 
-const posts = [
-    {
-        id: 1,
-        title: 'Семинар',
-        href: '#',
-        description:
-            'Семинар за инструктори и съдии на БФ Таекуон-До ITF, Семинар за инструктори и съдии на БФ Таекуон-До ITF, Семинар за инструктори и съдии на БФ Таекуон-До ITF',
-        date: 'Mar 16, 2020',
-        datetime: '2020-03-16',
-        category: { title: 'Благоевград, България', href: '#' },
-        author: {
-            name: 'Michael Foster',
-            role: 'Co-Founder / CTO',
-            href: '#',
-            imageUrl:
-                'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
-    },
-    {
-        id: 2,
-        title: 'Boost your conversion rate',
-        href: '#',
-        description:
-            'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
-        date: 'Mar 16, 2020',
-        datetime: '2020-03-16',
-        category: { title: 'Marketing', href: '#' },
-        author: {
-            name: 'Michael Foster',
-            role: 'Co-Founder / CTO',
-            href: '#',
-            imageUrl:
-                'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
-    },
-    {
-        id: 3,
-        title: 'Boost your conversion rate',
-        href: '#',
-        description:
-            'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
-        date: 'Mar 16, 2020',
-        datetime: '2020-03-16',
-        category: { title: 'Marketing', href: '#' },
-        author: {
-            name: 'Michael Foster',
-            role: 'Co-Founder / CTO',
-            href: '#',
-            imageUrl:
-                'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        },
-    },
-    // More posts...
-];
 
 export default function Home() {
+    const { latestData = [] } = useLatestData("news");
+
+    const formattedDate = (dateString) => {
+        const monthAbbreviations = {
+            "January": "Ян",
+            "February": "Фев",
+            "March": "Март",
+            "April": "Апр",
+            "May": "Май",
+            "June": "Юни",
+            "July": "Юли",
+            "August": "Авг",
+            "September": "Септ",
+            "October": "Окт",
+            "November": "Ное",
+            "December": "Дек"
+        };
+
+        const date = new Date(dateString);
+
+        const monthName = date.toLocaleDateString('en-US', { month: 'long' });
+
+        const shortMonth = monthAbbreviations[monthName];
+
+        const formattedDate = `${date.getDate()} ${shortMonth}, ${date.getFullYear()}`;
+
+        return formattedDate;
+    };
+
     return (
         <>
             <section className="relative isolate bg-white px-6 py-14 sm:py-14 lg:px-8 border-b border-sky-600">
@@ -183,50 +161,50 @@ export default function Home() {
                         <h2 className="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Последни новини</h2>
                         <div className="hidden sm:my-5 sm:flex sm:justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                                <a href="#" className="font-semibold text-indigo-600">
+                                <Link to="/news" className="font-semibold text-indigo-600">
                                     <span aria-hidden="true" className="absolute inset-0" />
                                     повече тук <span aria-hidden="true">&rarr;</span>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
                     <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-10 sm:mt-10 sm:pt-0 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                        {posts.map((post) => (
-                            <article key={post.id} className="flex max-w-xl flex-col items-start justify-between">
-                                <div className="flex items-center gap-x-4 text-xs">
-                                    <time dateTime={post.datetime} className="text-gray-500">
-                                        {post.date}
-                                    </time>
-                                    <a
-                                        href={post.category.href}
-                                        className="relative rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
-                                    >
-                                        {post.category.title}
-                                    </a>
-                                </div>
-                                <div className="group relative">
-                                    <h3 className="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
-                                        <a href={post.href}>
-                                            <span className="absolute inset-0" />
-                                            {post.title}
-                                        </a>
-                                    </h3>
-                                    <p className="mt-5 line-clamp-3 text-sm/6 text-gray-600">{post.description}</p>
-                                </div>
-                                <div className="relative mt-8 flex items-center gap-x-4">
-                                    <img alt="" src={post.author.imageUrl} className="size-10 rounded-full bg-gray-50" />
-                                    <div className="text-sm/6">
-                                        <p className="font-semibold text-gray-900">
-                                            <a href={post.author.href}>
-                                                <span className="absolute inset-0" />
-                                                {post.author.name}
-                                            </a>
-                                        </p>
-                                        <p className="text-gray-600">{post.author.role}</p>
+                        {latestData.length === 0 ? (
+                            <p className="text-center text-gray-500">Няма налични новини.</p>
+                        ) : (
+                            latestData.map((post) => (
+                                <article key={post._id} className="flex max-w-xl flex-col items-start justify-between border rounded-xl border-gray-200 px-3 py-3 hover:border-gray-400">
+                                    {post.newsType === "event" && (
+                                        <div className="flex items-center gap-x-4 text-xs">
+                                            <span className="text-gray-500">
+                                                {formattedDate(post.eventDate)}
+                                            </span>
+                                            <span className="relative rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
+                                                {post.eventLocation}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div className="">
+                                        <h3 className="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
+
+                                            <span className="">
+                                                {post.title}
+                                            </span>
+
+                                        </h3>
+                                        <Link to={`/news/${post._id}/details`}>
+                                            <p className="mt-5 line-clamp-3 text-sm/6 text-gray-600">{post.description}</p>
+                                        </Link>
                                     </div>
-                                </div>
-                            </article>
-                        ))}
+                                    <div className="mt-4 flex items-center justify-between">
+                                        <div className="text-sm/6">
+                                            <p className="text-gray-400 text-xs">публикувано на {formattedDate(post.publishedDate)}</p>
+                                        </div>
+
+                                    </div>
+                                </article>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
@@ -308,35 +286,6 @@ export default function Home() {
 
                 </div>
             </div>
-
-            {/* <div className="bg-white pt-10 sm:pt-10 sm:pb-30 ">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col gap-10 border-t border-gray-200 pt-3">
-
-                    <div className="max-w-xl">
-                        <h2 className="text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">
-                            Комисии
-                        </h2>
-                        <p className="mt-0 text-lg/8 text-gray-600">
-                            Председатели и членове на комисии
-                        </p>
-                    </div>
-
-                    <ul role="list" className="grid gap-x-8 gap-y-5 sm:grid-cols-4 sm:gap-y-10">
-                        {chairmenAndMembersOfCommittees.map((person) => (
-                            <li key={person.committees}>
-                                <div className="flex items-center gap-x-6">
-                                    <div>
-                                        <h3 className="text-base/10 font-semibold tracking-tight text-stone-900">{person.committees}</h3>
-                                        <p className="text-sm/6 font-semibold text-stone-800">Председател: <span className="text-stone-500">{person.chairmen}</span></p>
-                                        <p className="text-sm/6 font-semibold text-stone-800">Членове: <span className="text-stone-500">{person.members}</span></p>
-                                    </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-
-                </div>
-            </div> */}
 
             <div className="bg-white pt-10 sm:pt-10 sm:pb-20 ">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col gap-10 border-t border-gray-200 pt-5">

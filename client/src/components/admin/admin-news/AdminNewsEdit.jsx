@@ -12,10 +12,14 @@ export default function AdminNewsEdit() {
 
     const { email } = useContext(UserContext);
     const [newsType, setNewsType] = useState(getOne.newsType);
+    const [postStatus, setPostStatus] = useState(getOne.postStatus || "off");
+
 
     useEffect(() => {
         if (getOne) {
             setNewsType(getOne.newsType);
+            setPostStatus(getOne.postStatus || "off");
+
         }
     }, [getOne]);
 
@@ -27,7 +31,7 @@ export default function AdminNewsEdit() {
 
         data.newsType = newsType;
         data.eventDate = formData.get("eventDate") || new Date().toISOString().split('T')[0];
-        data.postStatus = formData.get("postStatus") || "off";
+        data.postStatus = postStatus;
         data.publishedDate = formattedDate;
         data.publishedBy = email;
 
@@ -40,6 +44,11 @@ export default function AdminNewsEdit() {
     const handleNewsTypeChange = (e) => {
         setNewsType(e.target.value);
     };
+    // Handle checkbox change to toggle between "on" and "off"
+    const handleCheckboxChange = () => {
+        setPostStatus((prevStatus) => (prevStatus === "on" ? "off" : "on"));
+    };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen py-10">
@@ -195,6 +204,8 @@ export default function AdminNewsEdit() {
                                 type="checkbox"
                                 id="postStatus"
                                 name="postStatus"
+                                checked={postStatus === "on"}
+                                onChange={handleCheckboxChange}
                                 className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                             />
                             <label htmlFor="postStatus" className="ml-2 text-sm text-gray-600">Публикувай</label>

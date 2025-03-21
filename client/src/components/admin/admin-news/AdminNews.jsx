@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { useDelete, useGetAll } from "../../../api/adminApi";
 
 export default function AdminNews() {
-    const { getAll } = useGetAll("news");
+    const { getAll, refreshData } = useGetAll("news");
     const { deleteData } = useDelete("news");
 
     const onDeleteNewsClickHandler = async (news) => {
@@ -12,6 +12,7 @@ export default function AdminNews() {
         }
 
         await deleteData(news._id);
+        refreshData();
     }
 
     // Formatted date to Ex.: 28 Март, 2025
@@ -44,21 +45,28 @@ export default function AdminNews() {
 
 
     return (
+
+
+
+
         <div className="flex flex-col justify-center items-center p-8 mt-10">
-            <div className="mx-auto max-w-7xl">
-                <div className="flex items-center w-full max-w-7xl mb-8 border-b border-gray-300 pb-10 space-x-4 px-8">
-                    <h1 className="text-3xl font-bold text-gray-700">Новини и Събития</h1>
+            <div className="flex items-center w-full max-w-7xl mb-8 border-b border-gray-300 pb-10 space-x-4">
+                <h1 className="text-3xl font-bold text-gray-700">Новини и Събития</h1>
 
-                    <Link to="/admin/news/create" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-lg shadow-md transition duration-300">
-                        + Добави
-                    </Link>
-                </div>
+                <Link to="/admin/news/create" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-lg shadow-md transition duration-300">
+                    + Добави
+                </Link>
+            </div>
 
+
+            {getAll.length === 0 ? (
+                <p className="text-center text-gray-500 col-span-full">Няма налични новини и събития.</p>
+            ) : (
                 <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10  lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {getAll
                         .sort((a, b) => b._createdOn - a._createdOn)
                         .map((news) => (
-                            <article key={news.id} className={`max-w-xl flex-col items-start justify-between rounded-xl px-4 py-4 min-h-[400px] ${news.postStatus === "off" ? "border-2 border-red-500" : "border-2 border-green-500"}`}>
+                            <article key={news._id} className={`max-w-xl flex-col items-start justify-between rounded-xl px-4 py-4 min-h-[400px] ${news.postStatus === "off" ? "border-2 border-red-500" : "border-2 border-green-500"}`}>
                                 {news.newsType === "event" && (
                                     <div className="flex items-center gap-x-4 text-xs">
                                         <time dateTime={news.eventDate} className="text-gray-500">
@@ -72,7 +80,7 @@ export default function AdminNews() {
 
 
                                 <div className="group relative flex-1 flex flex-col gap-y-4 w-full">
-                                    <h3 className="mt-2 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
+                                    <h3 className="mt-2 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600 line-clamp-2">
                                         {news.title}
                                     </h3>
 
@@ -97,8 +105,6 @@ export default function AdminNews() {
                                     </div>
 
                                     <p className="text-xs bg-blue-100 text-dark px-3 py-1 rounded-md hover:bg-blue-400 hover:text-white transition"><span className="text-dark-800 mr-2">от</span>{news.publishedBy}</p>
-                                    {/* <a href="#" className="text-xs bg-blue-200 text-dark px-3 py-1 rounded-md hover:bg-blue-600 transition">...още</a> */}
-
                                 </div>
 
                                 <div className="grid grid-cols-2 border-t pt-3 mt-5 border-gray-300 text-sm text-gray-700 divide-x divide-gray-300 h-12">
@@ -120,9 +126,11 @@ export default function AdminNews() {
                                 </div>
 
                             </article>
+
                         ))}
                 </div>
-            </div>
+            )}
+
         </div >
 
     );

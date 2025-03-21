@@ -27,6 +27,8 @@ import Logout from './components/logout/Logout'
 import AdminProfile from './components/admin/admin-profile/AdminProfile'
 import AdminProfileEdit from './components/admin/admin-profile/AdminProfileEdit'
 import AdminNewsEdit from './components/admin/admin-news/AdminNewsEdit'
+import NewsDetails from './components/news/NewsDetails'
+import ClubDetails from './components/clubs/ClubDetails'
 
 function App() {
     const [authData, setAuthData] = useState({});
@@ -61,8 +63,13 @@ function App() {
                             <Route path='/' element={<Home />} />
                             <Route path='/contact' element={<Contact />} />
                             <Route path='/news' element={<News />} />
+                            <Route path='/news/:newsId/details' element={<NewsDetails />} />
+                            <Route path='/education/history' element={<History />} />
+                            <Route path='/education/terminology' element={<Terminology />} />
+                            <Route path='/education/theory' element={<Theory />} />
                             <Route path='/about-us' element={<AboutUs />} />
                             <Route path='/clubs' element={<Clubs />} />
+                            <Route path='/club/:clubId/details' element={<ClubDetails />} />
                             <Route path='/login' element={<Login onLogin={userLoginHandler} />} />
                             <Route path='/logout' element={<Logout />} />
                             <Route path='/register' element={<Register />} />
@@ -79,9 +86,6 @@ function App() {
                                     <Route path='/admin/news/:newsId/edit' element={<AdminNewsEdit />} />
                                     <Route path='/admin/clubs/create' element={<AdminClubsAddNew />} />
                                     <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
-                                    <Route path='/education/history' element={<History />} />
-                                    <Route path='/education/terminology' element={<Terminology />} />
-                                    <Route path='/education/theory' element={<Theory />} />
                                 </>
                             )}
 
