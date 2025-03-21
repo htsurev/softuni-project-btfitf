@@ -1,5 +1,6 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import usePersistedState from './hooks/usePersistedState'
 
 import Home from './components/Home/Home'
 import Login from './components/login/Login'
@@ -31,7 +32,7 @@ import NewsDetails from './components/news/NewsDetails'
 import ClubDetails from './components/clubs/ClubDetails'
 
 function App() {
-    const [authData, setAuthData] = useState({});
+    const [authData, setAuthData] = usePersistedState('auth', {});
     const isLogged = authData.email;
     const location = useLocation();
 
