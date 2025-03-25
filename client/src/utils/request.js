@@ -4,12 +4,25 @@ const request = async (method, url, data, options = {}) => {
             options.method = method;
         }
 
+        const authData = JSON.parse(localStorage.getItem('auth'));
+
+        if (authData.accessToken) {
+            options = {
+                ...options,
+                headers: {
+                    'X-Authorization' : authData.accessToken,
+                    ...options.headers,
+                    'Content-Type': 'application/json',
+                },
+            }; 
+        }
+
         if (data) {
             options = {
                 ...options,
                 headers: {
-                    'Content-Type': 'application/json',
                     ...options.headers,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
             };

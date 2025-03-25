@@ -19,7 +19,7 @@ const managementBoard = [
     {
         id: 3,
         name: 'Вергилий Ситнилски',
-        role: 'Генерален секретар на БФТ ITF',
+        role: ['Генерален секретар на БФТ ITF', 'Координатор по защита на данните'],
         imageUrl:
             'https://itfbulgaria.com/wp-content/uploads/2022/03/vergilii_sitnilski_172x172.png',
     },
@@ -29,8 +29,8 @@ const chairmenAndMembersOfCommittees = [
     {
         id: 1,
         committees: 'Съдийска комисия',
-        chairmen: 'Няма',
-        members: 'Желязко Гагов, Александър Русев',
+        chairmen: 'Желязко Гагов',
+        members: 'Няма',
     },
     {
         id: 2,
@@ -47,7 +47,7 @@ const chairmenAndMembersOfCommittees = [
     {
         id: 4,
         committees: 'Комисия по състезанията и турнирите',
-        chairmen: 'Калин Мирчев',
+        chairmen: 'Любомир Пискулийски',
         members: 'Теодор Найденов',
     },
 
@@ -277,7 +277,13 @@ export default function Home() {
                                     <img alt="" src={person.imageUrl} className="size-30 rounded-full" />
                                     <div>
                                         <h3 className="text-base/7 font-semibold tracking-tight text-gray-900">{person.name}</h3>
-                                        <p className="text-sm/6 font-semibold text-indigo-600">{person.role}</p>
+                                        <p className="text-sm/6 font-semibold text-indigo-600">
+                                            {person.role ? (
+                                                Array.isArray(person.role)
+                                                    ? person.role.join(', ')
+                                                    : person.role
+                                            ) : null}
+                                        </p>
                                     </div>
                                 </div>
                             </li>

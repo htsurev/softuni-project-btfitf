@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import request from "../utils/request";
 import useAuth from "../hooks/useAuth";
-import { UserContext } from "../contexts/UserContext";
 
 const baseUrl = "http://localhost:3030/data";
 

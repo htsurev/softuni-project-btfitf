@@ -1,16 +1,16 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { UserContext } from '../../contexts/UserContext';
 
 import {
     Popover,
     PopoverButton,
     PopoverPanel,
 } from '@headlessui/react'
+import useAuth from '../../hooks/useAuth';
 
 
 const navigation = [
@@ -40,7 +40,7 @@ export default function Header() {
         setMobileMenuOpen(false);
     };
 
-    const { email } = useContext(UserContext);
+    const { isAuthenticated } = useAuth();
 
 
     return (
@@ -104,7 +104,7 @@ export default function Header() {
                     ))}
                 </div>
 
-                {email
+                {isAuthenticated
                     ? (
                         <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
                             <Link to="/logout" className="text-sm/6 font-semibold text-slate-200 ">
