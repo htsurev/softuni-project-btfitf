@@ -3,8 +3,7 @@ import useAuth from "../../../hooks/useAuth";
 import { FaRegUser } from "react-icons/fa";
 
 export default function AdminProfileEdit() {
-    const { email, fullName } = useAuth();
-   
+    const { email, fullName, _id } = useAuth();
 
     return (
         <div className="profile-container p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto my-8">

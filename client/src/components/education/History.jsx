@@ -1,12 +1,10 @@
+import Breadcrumb from "../breadcrumb/Breadcrumb";
+
 export default function History() {
 
     return (
         <div className="mx-auto max-w-2xl lg:max-w-4xl mt-5 mb-15">
-            <div className="mb-6 text-sm text-gray-600">
-                <span>Home</span>
-                <span className="mx-2">/</span>
-                <span>Terminology</span>
-            </div>
+            <Breadcrumb />
             <h2 className="text-2xl/20 ">ИСТОРИЯ НА ТАЕКУОН-ДО</h2>
             <p className="mb-4">Историята на ТаеКуон-До, не може да бъде разказана без да споменем личната история на признатия за баща на модерното ТаеКуон-До, създател и президент на Международната ТаеКуон-До Федерация (ITF), генерал Чой Хонг Хи. Поради неговите неуморни усилия и неотслабваща преданост към ТаеКуон-До, в момента то се ползва с такава голяма популярност в света.</p>
 

@@ -13,7 +13,7 @@ export const useLogin = () => {
                 { email, password },
             );
             return result;
-            
+
 
         } catch (error) {
             console.error("Login error:", error);
@@ -23,7 +23,6 @@ export const useLogin = () => {
 
     return { login };
 };
-
 
 export const useRegister = () => {
     const register = (email, password) =>
@@ -39,9 +38,11 @@ export const useLogout = () => {
 
     useEffect(() => {
         if (!accessToken) {
+            console.log("No access token");
+            
             return;
         }
-
+        
         const options = {
             headers: {
                 'X-Authorization': accessToken,
@@ -49,7 +50,7 @@ export const useLogout = () => {
         };
 
         request.get(`${baseUrl}/logout`, null, options)
-            .then(userLogoutHandler)
+            .finally(userLogoutHandler)
 
     }, [accessToken, userLogoutHandler]);
 

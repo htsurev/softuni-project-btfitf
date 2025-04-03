@@ -9,7 +9,7 @@ export default function AdminClubsAddNew() {
     const addClubForm = async (formData) => {
         const data = Object.fromEntries(formData);
 
-        await create(data);
+        await create(data);      
 
         navigate('/admin/clubs')
 
@@ -34,11 +34,11 @@ export default function AdminClubsAddNew() {
                                     <div className="text-center">
                                         <div className="mt-4 flex text-sm/6 text-gray-600">
                                             <label
-                                                htmlFor="file-upload"
+                                                htmlFor="clubImgFile"
                                                 className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500"
                                             >
                                                 <span>Upload a file</span>
-                                                {/* <input id="file-upload" name="file-upload" type="file" className="sr-only" /> */}
+                                                <input id="clubImgFile" name="clubImgFile" type="file" className="sr-only" />
                                             </label>
                                             <p className="pl-1">or drag and drop</p>
                                         </div>
@@ -48,13 +48,13 @@ export default function AdminClubsAddNew() {
                             </div>
 
                             <div className="sm:col-span-full">
-                                <label htmlFor="imageUrl" className="block text-sm/6 font-medium text-gray-900">
+                                <label htmlFor="clubImgUrl" className="block text-sm/6 font-medium text-gray-900">
                                     Снимка URL
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        id="imageUrl"
-                                        name="imageUrl"
+                                        id="clubImgUrl"
+                                        name="clubImgUrl"
                                         type="text"
                                         placeholder="https://..."
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -72,8 +72,23 @@ export default function AdminClubsAddNew() {
                                         name="clubName"
                                         type="text"
                                         placeholder="Име на клуба"
+                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-full">
+                                <label htmlFor="clubDescription" className="block text-sm/6 font-medium text-gray-900">
+                                    Кратко описание
+                                </label>
+                                <div className="mt-2">
+                                    <textarea
+                                        id="clubDescription"
+                                        name="clubDescription"
+                                        placeholder="Година на създаване, постижения, интересни факти, какво е постигнал и какво го прави специален ..."
+                                        className="h-30 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    ></textarea>
                                 </div>
                             </div>
 
@@ -87,6 +102,7 @@ export default function AdminClubsAddNew() {
                                         name="city"
                                         type="text"
                                         placeholder="Град"
+                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -102,6 +118,7 @@ export default function AdminClubsAddNew() {
                                         name="postcode"
                                         type="text"
                                         placeholder="1234"
+                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -117,6 +134,7 @@ export default function AdminClubsAddNew() {
                                         name="address"
                                         type="text"
                                         placeholder="Адрес"
+                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -132,6 +150,7 @@ export default function AdminClubsAddNew() {
                                         name="phoneNumberOne"
                                         type="tel"
                                         placeholder="0879123456"
+                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                     <input
@@ -155,6 +174,7 @@ export default function AdminClubsAddNew() {
                                         name="email"
                                         type="email"
                                         placeholder="example@domain.com"
+                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>

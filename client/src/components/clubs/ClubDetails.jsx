@@ -1,5 +1,7 @@
 import { ImLocation } from "react-icons/im";
 import { MdPhone, MdEmail } from "react-icons/md";
+import { useGetOne } from "../../api/adminApi";
+import { useParams } from "react-router";
 
 
 const sportists = [
@@ -11,11 +13,12 @@ const sportists = [
 
 
 export default function ClubDetails() {
+    const { clubId } = useParams();
+    const { getOne } = useGetOne('clubs', clubId);
 
     return (
         <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg my-5">
 
-            {/* Club Logo & Name */}
             <div className="flex flex-col md:flex-row items-start mb-6 p-4 bg-gray-50 rounded-lg">
                 <img
                     src="https://itfbulgaria.com/wp-content/uploads/2022/02/falcon-logo-200px.jpg"
@@ -24,25 +27,28 @@ export default function ClubDetails() {
                 />
 
                 <div className="flex flex-col flex-1 mx-5 text-center md:text-left">
-                    <h1 className="text-2xl font-bold mb-2">Taekwondo Club Sofia</h1>
+                    <h1 className="text-2xl font-bold mb-2">{getOne.clubName}</h1>
                     <p className="text-gray-600 mb-2">
-                        Основан през 2005 година. Един от водещите клубове по таекуондо в България. Основан през 2005 година.
+                        {getOne.clubDescription}
                     </p>
 
                     <div className="flex flex-col md:flex-row md:items-center md:space-x-8 justify-center md:justify-start mt-4">
                         <div className="flex items-center">
                             <ImLocation className="mr-2 text-lg" />
-                            <p className="text-gray-700">бул. България 100, София</p>
+                            <p className="text-gray-700">{getOne.address}</p>
                         </div>
 
                         <div className="flex items-center mb-2 md:mb-0">
                             <MdPhone className="mr-2 text-lg" />
-                            <p className="text-gray-700">0897918913, 0895555162</p>
+                            <p className="text-gray-700">
+                                {getOne.phoneNumberOne}
+                                {getOne.phoneNumberTwo && `, ${getOne.phoneNumberTwo}`}
+                            </p>
                         </div>
 
                         <div className="flex items-center mb-2 md:mb-0">
                             <MdEmail className="mr-2 text-lg" />
-                            <p className="text-gray-700">clubsofia@taekwondo.bg</p>
+                            <p className="text-gray-700">{getOne.email}</p>
                         </div>
                     </div>
                 </div>
@@ -50,7 +56,6 @@ export default function ClubDetails() {
 
             <hr className="my-6" />
 
-            {/* Trainers */}
             <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Треньори</h2>
                 <ul className="list-disc pl-5 text-gray-700">
@@ -58,9 +63,8 @@ export default function ClubDetails() {
                     <li>Мария Петрова - Асистент треньор</li>
                 </ul>
             </div>
-            
 
-            {/* Active Sportists */}
+
             <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Активни Спортисти</h2>
                 <div className="overflow-x-auto">
@@ -94,7 +98,6 @@ export default function ClubDetails() {
 
             <hr className="my-6" />
 
-            {/* Optional: Achievements */}
             <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-2">Постижения</h2>
                 <ul className="list-disc pl-5 text-gray-700">

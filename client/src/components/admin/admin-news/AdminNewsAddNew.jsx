@@ -24,8 +24,6 @@ export default function AdminNewsAddNew() {
 
         await create(data);       
 
-        // setNewsType("news");
-
         navigate('/admin/news')
     };
 

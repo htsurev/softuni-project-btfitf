@@ -45,6 +45,7 @@ export const useGetAll = (storagePath) => {
                 const response = await request.get(`${baseUrl}/${storagePath}`);
                 setGetAll(response);
             } catch (error) {
+                
                 console.error("Error fetching all data:", error);
             }
         };

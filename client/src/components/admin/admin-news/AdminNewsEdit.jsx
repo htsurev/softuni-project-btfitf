@@ -14,7 +14,6 @@ export default function AdminNewsEdit() {
     const [newsType, setNewsType] = useState(getOne.newsType);
     const [postStatus, setPostStatus] = useState(getOne.postStatus || "off");
 
-
     useEffect(() => {
         if (getOne) {
             setNewsType(getOne.newsType);
@@ -40,11 +39,10 @@ export default function AdminNewsEdit() {
         navigate('/admin/news')
     };
 
-    // Handle radio button change
     const handleNewsTypeChange = (e) => {
         setNewsType(e.target.value);
     };
-    // Handle checkbox change to toggle between "on" and "off"
+
     const handleCheckboxChange = () => {
         setPostStatus((prevStatus) => (prevStatus === "on" ? "off" : "on"));
     };

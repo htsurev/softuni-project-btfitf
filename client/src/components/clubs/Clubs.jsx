@@ -25,9 +25,15 @@ export default function Clubs() {
                         <Link to={`/club/${club._id}/details`} key={club._id}>
                             <div className="rounded-2xl p-6 text-center shadow-xl flex flex-col items-center shadow-stone-500/50 inset-shadow-sm inset-shadow-stone-500 bg-gray-200 hover:shadow-stone-100/50 hover:inset-shadow-lg hover:inset-shadow-stone-800 hover:bg-gray-300">
                                 <img
-                                    src={club.imageUrl}
-                                    alt="Contact"
-                                    className="rounded-full mb-4"
+                                    src={
+                                        club.clubImgFile && club.clubImgFile.length > 0
+                                            ? URL.createObjectURL(club.clubImgFile[0])
+                                            : club.clubImgUrl && club.clubImgUrl.trim() !== ""
+                                                ? club.clubImgUrl
+                                                : "/public/clubs-logo/bft.png"
+                                    }
+                                    alt={club.clubName}
+                                    className="mb-4 w-32 h-32 object-cover rounded-xl"
                                 />
                                 <h4 className="font-semibold text-gray-900 mb-3">{club.clubName}</h4>
                                 <p className="text-gray-700 flex items-center mb-2">

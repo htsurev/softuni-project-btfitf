@@ -1,27 +1,37 @@
 import { Link, useNavigate } from "react-router";
 import { useRegister } from "../../api/authApi";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 
 export default function Register() {
     const navigate = useNavigate();
     const { register } = useRegister();
     const { userLoginHandler } = useContext(UserContext);
+    const [showRegisterError, setShowRegisterError] = useState(false);
 
     const registerHandler = async (formData) => {
-        const { email, password } = Object.fromEntries(formData);
+        try {
+            const { email, password } = Object.fromEntries(formData);
 
-        const confirmPasswor = formData.get("confirm-password");
+            const confirmPasswor = formData.get("confirm-password");
 
-        if (password !== confirmPasswor) {
-            return;
+            if (password !== confirmPasswor) {
+                setShowRegisterError("Паролите не съвпадат!");
+                return;
+            }
+            setShowRegisterError(false);
+            const authData = await register(email, password);
+
+            userLoginHandler(authData);
+
+            navigate('/admin/profile/edit');
+        } catch (error) {
+            setShowRegisterError("Вече съществува потребител със същия имейл");
+            console.error("Login failed:", error);
+
+            return { error: true };
         }
 
-        const authData = await register(email, password);
-
-        userLoginHandler(authData);
-
-        navigate('/admin/profile/edit');
     }
 
     return (
@@ -35,6 +45,9 @@ export default function Register() {
                 <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                     Регистрация
                 </h2>
+                {showRegisterError && 
+                    <p className="text-center text-xs text-rose-600 mt-3">{showRegisterError}</p>
+                }
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

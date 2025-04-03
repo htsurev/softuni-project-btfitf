@@ -1,23 +1,16 @@
+import Breadcrumb from "../breadcrumb/Breadcrumb";
+
 export default function Terminology() {
+    
     return (
         <div className="mx-auto max-w-2xl lg:max-w-4xl mt-5 mb-15">
-            <div className="mb-6 text-sm text-gray-600">
-                <span>Home</span>
-                <span className="mx-2">/</span>
-                <span>Terminology</span>
-            </div>
+            <Breadcrumb />
             <div
                 className="w-full h-48 bg-cover bg-center mb-8 rounded-2xl shadow-lg"
                 style={{ backgroundImage: "url('https://gyortaekwondo.hu/wp-content/uploads/2015/09/background-900x300.jpg')" }}
             ></div>
             <p className="mb-4">Таекуондо означава „<strong>Пътят на ръцете и краката</strong>“ (Тае – крак; Куон – ръка; До – път, майсторство)</p>
-            <p className="mb-4">Таекуондо е <strong>корейско</strong> бойно изкуство.</p>
-            <p className="mb-4">Ние тренираме <strong>стил</strong> <strong>WT&nbsp;</strong>(World Taekwondo), познат още като олимпийски стил. Другият стил таекуондо е ITF (International Taekwondo Federation).<br />
-                Таекуондо е <strong>създадено през 1955 г.</strong> от генерал Чой Хонг Хи.<br />
-                Таекуондо е олимпийски спорт от 2000 г.<br />
-                Таекуондо клуб Самсон е създаден през <strong>2015 г.</strong>
-            </p>
-            <p className="mb-4">Терминология, необходима за изпит, на корейски и български език:</p>
+            
             <p className="mb-4"><strong>Доджанг</strong> – Зала<br />
                 <strong>Сабоним</strong> – Треньор, майстор<br />
                 <strong>Кьоне</strong> – Поздрав, поклон

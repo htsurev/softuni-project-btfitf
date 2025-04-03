@@ -1,4 +1,4 @@
-import { useActionState, useContext } from "react";
+import { useActionState, useContext, useState } from "react";
 import { useLogin } from "../../api/authApi";
 import { Link, useNavigate } from "react-router";
 import { UserContext } from "../../contexts/UserContext";
@@ -6,6 +6,7 @@ import { UserContext } from "../../contexts/UserContext";
 export default function Login() {
     const navigate = useNavigate();
     const { userLoginHandler } = useContext(UserContext);
+    const [showLoginError, setShowLoginError] = useState(false);
 
     const { login } = useLogin();
 
@@ -16,16 +17,17 @@ export default function Login() {
             const authData = await login(values.email, values.password);
 
             userLoginHandler(authData);
+            setShowLoginError(false);
 
             navigate('/admin/profile');
             return;
         } catch (error) {
+            setShowLoginError("Потребителското име или паролата не съвпадат");
             console.error("Login failed:", error);
-            alert("Грешен имейл или парола. Опитайте отново.");
 
             return { error: true };
         }
-    };
+    };    
 
     const [_, loginFormAction, isPending] = useActionState(loginHandler, { email: '', password: '' });
 
@@ -40,6 +42,9 @@ export default function Login() {
                 <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                     Влезте във вашия акаунт
                 </h2>
+                {showLoginError && 
+                    <p className="text-center text-xs text-rose-600 mt-3">{showLoginError}</p>
+                }
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
