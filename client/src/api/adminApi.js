@@ -91,25 +91,25 @@ export const useDelete = (storagePath) => {
     }
 }
 
-export const useLatestData = (storagePath) => {
-    const [latestData, setLatestData] = useState([]);
+export const useLatestNews = (storagePath) => {
+    const [latestNews, setLatestNews] = useState([]);
 
     useEffect(() => {
-        const fetchLatestData = async () => {
+        const fetchLatestNews = async () => {
             try {
                 const searchParams = new URLSearchParams({
                     sortBy: '_createdOn desc',
                     pageSize: 3
                 });
                 const response = await request.get(`${baseUrl}/${storagePath}?${searchParams.toString()}`);
-                setLatestData(response);
+                setLatestNews(response);
             } catch (error) {
                 console.error("Error fetching latest data:", error);
             }
         };
-        fetchLatestData();
+        fetchLatestNews();
     }, [storagePath]);
 
-    return { latestData };
+    return { latestNews };
 }
 

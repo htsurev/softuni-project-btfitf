@@ -2,6 +2,8 @@ import { useParams } from "react-router";
 import { useGetOne } from "../../api/adminApi";
 import { useState } from "react";
 
+import styles from "../../assets/styles/ratingStars.module.css"
+
 import { TbTruckDelivery } from "react-icons/tb";
 import { SlLocationPin } from "react-icons/sl";
 import { ITEMS_SIZES } from "../../constants/store/itemsSizes";
@@ -50,12 +52,12 @@ export default function StoreItemDetails() {
                             <div className="mt-2 flex flex-wrap gap-2">
                                 <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                                     {ITEMS_SIZES.map((size) => {
-                                        const isAvailable = getOne.sizeData[size]; // Check if the size exists in sizeData
+                                        const isAvailable = getOne.sizeData[size];
 
                                         return (
                                             <div
                                                 key={size}
-                                                className={`flex flex-col border rounded-lg w-20 p-2
+                                                className={`flex flex-col border rounded-lg w-20 py-1
                                                     ${isAvailable
                                                         ? "border-gray-400 hover:border-sky-600 cursor-pointer"
                                                         : "border-gray-300 bg-gray-200 cursor-not-allowed opacity-50"
@@ -66,8 +68,8 @@ export default function StoreItemDetails() {
                                                 }
                                                 onClick={() => isAvailable && handleSizeClick(size, getOne.sizeData[size])}
                                             >
-                                                <span className="text-sm font-semibold border-b border-gray-300 w-full">{size}</span>
-                                                <span className="text-xs text-gray-600 mt-1">
+                                                <span className="text-sm font-semibold border-b border-gray-300 w-full pl-2">{size}</span>
+                                                <span className="text-xs text-gray-600 mt-1 pl-2">
                                                     {isAvailable ? `${getOne.sizeData[size].price} ${getOne.sizeData[size].currency}` : "Няма наличност"}
                                                 </span>
                                             </div>
@@ -166,9 +168,6 @@ export default function StoreItemDetails() {
 
                     </div>
 
-
-
-
                     {/* Buttons */}
                     <button
                         className="w-full bg-yellow-300 text-dark py-2 rounded-xl hover:bg-yellow-400 cursor-pointer">
@@ -194,21 +193,66 @@ export default function StoreItemDetails() {
             </div>
 
             {/* Reviews Section */}
-            <div className="mt-10">
-                <h3 className="text-xl font-semibold text-gray-800">Customer Reviews</h3>
-                <div className="mt-4 space-y-4">
-                    <div className="p-4 border rounded-lg">
-                        <p className="font-bold">John Doe</p>
-                        <p className="text-yellow-500">★★★★☆</p>
-                        <p className="text-gray-600 mt-1">Great quality and fits perfectly! Highly recommend.</p>
-                    </div>
-                    <div className="p-4 border rounded-lg">
-                        <p className="font-bold">Jane Smith</p>
-                        <p className="text-yellow-500">★★★★★</p>
-                        <p className="text-gray-600 mt-1">Love the color and comfort! Will buy again.</p>
+            <div className="mt-10 grid grid-cols-12 gap-8">
+                {/* Left Column - Review Form */}
+                <div className="col-span-12 md:col-span-4 p-2">
+                    <h3 className="text-lg font-semibold text-gray-800 border-b pb-3">Оставете отзив</h3>
+                    <form className="mt-4 space-y-3">
+                        <input type="text" placeholder="Вашето име" className="w-full p-2 border rounded h-8 border-gray-300" required />
+
+                        <div className={`${styles.rate} justify-start`}>
+                            <input type="radio" id="star5" name="rate" value="5" required/>
+                            <label htmlFor="star5" title="5 stars">★</label>
+
+                            <input type="radio" id="star4" name="rate" value="4" />
+                            <label htmlFor="star4" title="4 stars">★</label>
+
+                            <input type="radio" id="star3" name="rate" value="3" />
+                            <label htmlFor="star3" title="3 stars">★</label>
+
+                            <input type="radio" id="star2" name="rate" value="2" />
+                            <label htmlFor="star2" title="2 stars">★</label>
+
+                            <input type="radio" id="star1" name="rate" value="1" />
+                            <label htmlFor="star1" title="1 star">★</label>
+                        </div>
+
+                        <input type="text" placeholder="Заглавие на отзива" className="w-full p-2 border rounded h-8 border-gray-300" required />
+                        <textarea placeholder="Вашият отзив..." rows="3" className="w-full p-2 border rounded border-gray-300" required></textarea>
+
+                        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                            Публикувайте отзив
+                        </button>
+                    </form>
+                </div>
+
+                {/* Right Column - Reviews */}
+                <div className="col-span-12 md:col-span-8">
+                    <h3 className="text-xl font-semibold text-gray-800 border-b border-gray-300 pb-5 pl-4">Отзиви </h3>
+                    <div className="mt-2 space-y-4">
+                        {[
+                            { name: "Alice Johnson", rating: "★★★★★", title: "Amazing Quality", review: "Exceeded expectations!" },
+                            { name: "Mark Lee", rating: "★★★★☆", title: "Comfortable Wear", review: "Very comfortable, but delivery took time." },
+                            { name: "Emma Wilson", rating: "★★★★★", title: "Highly Recommended", review: "Perfect fit and great material." },
+                            { name: "David Brown", rating: "★★★☆☆", title: "Decent Quality", review: "Good quality but sizing was a bit off." },
+                            { name: "Sophia Miller", rating: "★★★★★", title: "Loved It!", review: "Absolutely love it! Will order again." }
+                        ].map((review, index) => (
+                            <div key={index}>
+                                <div className="grid grid-cols-12 gap-4 p-4 items-center">
+                                    <p className="col-span-3 font-bold text-gray-800">{review.name}</p>
+                                    <p className="col-span-3 text-yellow-500">{review.rating}</p>
+                                    <div className="col-span-6">
+                                        <p className="font-semibold text-gray-900">{review.title}</p>
+                                        <p className="text-gray-600">{review.review}</p>
+                                    </div>
+                                </div>
+                                {index < 4 && <hr className="border-gray-300" />} {/* Horizontal line except last item */}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
+
         </div >
     );
 }

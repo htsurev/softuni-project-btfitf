@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useLatestData } from "../../api/adminApi";
+import { useLatestNews } from "../../api/adminApi";
 
 const managementBoard = [
     {
@@ -61,8 +61,11 @@ const stats = [
 ]
 
 
+
+
+
 export default function Home() {
-    const { latestData = [] } = useLatestData("news");
+    const { latestNews = [] } = useLatestNews("news");
 
     const formattedDate = (dateString) => {
         const monthAbbreviations = {
@@ -169,10 +172,10 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-10 sm:mt-10 sm:pt-0 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                        {latestData.length === 0 ? (
+                        {latestNews.length === 0 ? (
                             <p className="text-center text-gray-500">Няма налични новини.</p>
                         ) : (
-                            latestData.map((post) => (
+                            latestNews.map((post) => (
                                 <article key={post._id} className="flex max-w-xl flex-col items-start justify-between border rounded-xl border-gray-200 px-3 py-3 hover:border-gray-400">
                                     {post.newsType === "event" && (
                                         <div className="flex items-center gap-x-4 text-xs">

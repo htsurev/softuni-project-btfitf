@@ -2,11 +2,16 @@ import { Link } from "react-router-dom";
 import { useState } from 'react'
 import { Dialog, DialogPanel, DialogBackdrop } from '@headlessui/react'
 import { useDelete, useGetAll } from "../../../api/adminApi";
+import useAuth from "../../../hooks/useAuth";
 
 export default function AdminStore() {
     const { getAll, refreshData } = useGetAll("store");
     const [showImage, setShowImage] = useState(null)
     const { deleteData } = useDelete("store");
+    const { _id: ownerIdOfPost } = useAuth();
+
+    console.log(ownerIdOfPost);
+
 
     const onDeleteItemClickHandler = async (item) => {
         const hasConfirm = confirm(`Изтриване на артикул - ${item.itemTitle}`);
@@ -37,7 +42,7 @@ export default function AdminStore() {
                         .map((item) => (
                             <div
                                 key={item._id}
-                                className={`bg-white rounded-lg shadow-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-xl ${item.itemStatus === "off" ? "border-2 border-red-500" : "border-2 border-green-500"}`}
+                                className={`border border-gray-300 rounded-lg shadow-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-xl ${item.itemStatus === "off" ? "bg-red-100 border border-red-500" : "bg-green-50 border border-green-500"}`}
                             >
                                 <div className="relative w-full h-30 mb-4">
                                     {item.itemImgUrl && (
@@ -52,23 +57,25 @@ export default function AdminStore() {
 
                                 <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-1">{item.itemTitle}</h3>
 
-                                <div className="grid grid-cols-2 border-t pt-3 border-gray-300 text-sm text-gray-700 divide-x divide-gray-300 h-12">
-                                    <div className="flex items-center justify-center">
-                                        <Link
-                                            to={`/admin/store/${item._id}/edit`}
-                                            className="w-full h-full bg-gray-300 hover:bg-blue-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer flex items-center justify-center"
-                                        >
-                                            edit
-                                        </Link>
+                                {ownerIdOfPost === item._ownerId && (
+                                    <div className="grid grid-cols-2 border-t pt-3 border-gray-300 text-sm text-gray-700 divide-x divide-gray-300 h-12">
+                                        <div className="flex items-center justify-center">
+                                            <Link
+                                                to={`/admin/store/${item._id}/edit`}
+                                                className="w-full h-full bg-gray-300 hover:bg-blue-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer flex items-center justify-center"
+                                            >
+                                                edit
+                                            </Link>
+                                        </div>
+                                        <div className="flex items-center justify-center">
+                                            <button
+                                                onClick={() => onDeleteItemClickHandler(item)}
+                                                className="w-full h-full bg-red-300 hover:bg-red-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer">
+                                                delete
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center justify-center">
-                                        <button
-                                            onClick={() => onDeleteItemClickHandler(item)}
-                                            className="w-full h-full bg-red-300 hover:bg-red-700 text-dark hover:text-white rounded-lg shadow-md transition duration-300 mx-2 cursor-pointer">
-                                            delete
-                                        </button>
-                                    </div>
-                                </div>
+                                )}
 
                             </div>
                         ))}

@@ -11,13 +11,13 @@ const clubsData = [
         id: 2,
         name: "Tiger Academy",
         belt: "Brown",
-        logo: "https://via.placeholder.com/40",
+        logo: "/clubs-logo/bft.png",
     },
     {
         id: 3,
         name: "Phoenix Gym",
         belt: "Purple",
-        logo: "https://via.placeholder.com/40",
+        logo: "/clubs-logo/bft.png",
     },
 ];
 

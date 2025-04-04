@@ -1,0 +1,38 @@
+/* Container for the stars */
+.rate {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-direction: row-reverse; /* Reverse the order of stars */
+    justify-content: flex-end; /* Position the stars on the right */
+}
+
+/* Hide the radio buttons */
+.rate input[type="radio"] {
+    display: none;
+}
+
+/* Style for each star */
+.rate label {
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc; /* Default color for unselected stars */
+}
+
+/* Hover effect - stars from right to left will turn yellow */
+.rate input[type="radio"]:not(:checked) + label:hover,
+.rate input[type="radio"]:not(:checked) + label:hover ~ label {
+    color: #deb217; /* Light yellow on hover */
+}
+
+/* When a radio button is checked, stars from right to left will turn yellow */
+.rate input[type="radio"]:checked + label,
+.rate input[type="radio"]:checked + label ~ label {
+    color: #ffc700; /* Yellow color for selected stars */
+}
+
+/* Hover effect on already selected stars */
+.rate input[type="radio"]:checked + label:hover,
+.rate input[type="radio"]:checked + label:hover ~ label {
+    color: #deb217; /* Change color when hovering over already selected stars */
+}
