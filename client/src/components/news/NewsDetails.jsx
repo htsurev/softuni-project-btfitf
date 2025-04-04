@@ -20,16 +20,35 @@ export default function NewsDetails() {
 
     useEffect(() => {
         if (getAll.length > 0 && userId) {
-            const likedNews = getAll.find(like => like._ownerId === userId);
+            // Find the like where both the newsId and userId match
+            const likedNews = getAll.find(like => like._ownerId === userId && like.newsId === getOne._id);
 
             if (likedNews) {
-                setLikedNewsId(likedNews._id);  // Store the liked post's ID
+                setLikedNewsId(likedNews._id); // Set the liked news ID
             } else {
-                setLikedNewsId(null);
+                setLikedNewsId(null); // Set it to null if no match is found
             }
         }
-    }, [getAll, userId]);
+    }, [getAll, userId, getOne._id]);
 
+
+    const addLikeBtnClickHandler = async () => {
+        const likeData = {
+            newsId: getOne._id,
+        };
+
+        await create(likeData);
+        refreshData();
+
+    }
+
+    const deleteLikeBtnClickHandler = async () => {
+        if (likedNewsId) {
+            await deleteData(likedNewsId);
+            setLikedNewsId(null);
+            refreshData();
+        }
+    };
 
     const formattedDate = (dateString) => {
         const monthAbbreviations = {
@@ -55,28 +74,6 @@ export default function NewsDetails() {
         return formattedDate;
     };
 
-    const addLikeBtnClickHandler = async () => {
-        const likeData = {
-            newsId: getOne._id,
-        };
-
-        await create(likeData);
-        refreshData();
-
-    }
-
-
-    const deleteLikeBtnClickHandler = async () => {
-        if (likedNewsId) {
-            await deleteData(likedNewsId);  // Use the newsId for deleting the like
-            setLikedNewsId(null);
-            refreshData();
-        }
-    };
-
-
-
-
     return (
         <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:pt-16 sm:pb-0 lg:overflow-visible lg:px-0">
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
@@ -99,22 +96,34 @@ export default function NewsDetails() {
                             </h1>
 
                             <div className="mt-2 flex items-center space-x-2 text-md text-gray-600">
-                                {isLogged
-                                    ? (
-                                        <button className="flex items-center font-mono tracking-wide cursor-pointer bg-gray-100 hover:bg-gray-300 px-5 rounded-full transition-colors duration-300 mt-3 py-1 focus:outline-none"
-                                            onClick={likedNewsId ? deleteLikeBtnClickHandler : addLikeBtnClickHandler}
-                                        >
-                                            <span className=" text-red-500 text-xl">{likedNewsId ? <FaHeart /> : <FaRegHeart />}</span>
-                                            <span className="text-gray-800 font-light text-xs mx-2">{getAll.length ? getAll.length : ""}</span>
-                                            <span className="text-gray-800 font-light "> {likedNewsId ? "Харесано" : "Харесай"}</span>
-                                        </button>
-                                    ) : (
-                                        <span className="flex items-center font-mono tracking-wide bg-gray-100 px-5 rounded-full transition-colors duration-300 mt-3 py-1 focus:outline-none">
-                                            <span className="ml-1 text-red-500 text-xl">{getAll.length ? <FaHeart /> : <FaRegHeart />}</span>
-                                            <span className="text-gray-800 font-light text-xs mx-2">{getAll.length ? getAll.length : ""}</span>
-                                            <span className="text-gray-800 font-light ">Харесвания</span>
+                                {isLogged ? (
+                                    <button
+                                        className="flex items-center font-mono tracking-wide cursor-pointer bg-gray-100 hover:bg-gray-300 px-5 rounded-full transition-colors duration-300 mt-3 py-1 focus:outline-none"
+                                        onClick={likedNewsId ? deleteLikeBtnClickHandler : addLikeBtnClickHandler}
+                                    >
+                                        <span className=" text-red-500 text-xl">
+                                            {likedNewsId ? <FaHeart /> : <FaRegHeart />}
                                         </span>
-                                    )}
+                                        {/* Filter likes to show only those for the current news */}
+                                        <span className="text-gray-800 font-light text-xs mx-2">
+                                            {getAll.filter(like => like.newsId === getOne._id).length || ""}
+                                        </span>
+                                        <span className="text-gray-800 font-light ">
+                                            {likedNewsId ? "Харесано" : "Харесай"}
+                                        </span>
+                                    </button>
+                                ) : (
+                                    <span className="flex items-center font-mono tracking-wide bg-gray-100 px-5 rounded-full transition-colors duration-300 mt-3 py-1 focus:outline-none">
+                                        <span className="ml-1 text-red-500 text-xl">
+                                            {getAll.filter(like => like.newsId === getOne._id).length ? <FaHeart /> : <FaRegHeart />}
+                                        </span>
+                                        <span className="text-gray-800 font-light text-xs mx-2">
+                                            {getAll.filter(like => like.newsId === getOne._id).length || ""}
+                                        </span>
+                                        <span className="text-gray-800 font-light ">Харесвания</span>
+                                    </span>
+                                )}
+
 
                                 {/* TODO add button to share in fb, whatsapp, etc. */}
                             </div>
