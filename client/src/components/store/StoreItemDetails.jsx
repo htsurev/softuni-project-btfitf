@@ -22,11 +22,12 @@ export default function StoreItemDetails() {
     const { create } = useCreate("reviews");
     const { deleteData } = useDelete("reviews");
 
+    const [loadingImage, setLoadingImage] = useState(true);
     const [showImage, setShowImage] = useState(null);
     const [showform, setShowForm] = useState(false);
     const [dataFormReview, setDataFormReview] = useState({});
 
-    const isReviewed = getAll.find(u => u._ownerId === authorId);
+    const isReviewed = getAll.find(u => u._ownerId === authorId && u.postId === getOne._id);   
 
     useEffect(() => {
         if (getAll && getAll.length > 0) {
@@ -98,21 +99,25 @@ export default function StoreItemDetails() {
         <div className="max-w-7xl mx-auto p-3 bg-white my-5">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 shadow-lg rounded-lg pt-5 pb-20 px-5">
                 {/* Product Image */}
-                <div className="col-span-1">
-                    {getOne.itemImgUrl ? (
-                        <img
-                            src={getOne.itemImgUrl || "/alert-images/noimage.jpg"}
-                            alt="Product"
-                            className="w-full rounded-lg cursor-pointer"
-                            onError={(e) => (e.target.src = "/alert-images/noimage.png")}
-                            onClick={() => setShowImage(getOne.itemImgUrl)}
-                        />
-                    ) : (
-                        <div className="flex items-center justify-center h-full">
-                            <FaSpinner className="animate-spin text-3xl text-gray-500" />
-                        </div>
+                <div className="relative w-full min-h-[200px] flex items-center justify-center">
+                    {loadingImage && (
+                        <FaSpinner className="animate-spin text-3xl text-gray-500 absolute" />
                     )}
+
+                    <img
+                        src={getOne.itemImgUrl || "/alert-images/noimage.jpg"}
+                        alt="Product"
+                        className={`w-full rounded-lg cursor-pointer transition-opacity duration-300 ${loadingImage ? "opacity-0" : "opacity-100"
+                            }`}
+                        onLoad={() => setLoadingImage(false)}
+                        onError={(e) => {
+                            e.target.src = "/alert-images/noimage.png";
+                            setLoadingImage(false);
+                        }}
+                        onClick={() => setShowImage(getOne.itemImgUrl)}
+                    />
                 </div>
+
 
 
                 <Dialog open={!!showImage} onClose={() => setShowImage(null)} className="relative z-10">
@@ -271,8 +276,6 @@ export default function StoreItemDetails() {
                         className="w-full bg-yellow-300 text-dark py-2 rounded-xl hover:bg-yellow-400 cursor-pointer">
                         Добави в количката
                     </button>
-
-
                     <button className="w-full bg-orange-400 text-dark py-2 rounded-xl hover:bg-orange-500 cursor-pointer">Купи сега</button>
 
                     <div className="grid grid-cols-2 gap-4 items-start text-gray-700">
