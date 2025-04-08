@@ -10,9 +10,6 @@ export default function AdminStore() {
     const { deleteData } = useDelete("store");
     const { _id: ownerIdOfPost } = useAuth();
 
-    console.log(ownerIdOfPost);
-
-
     const onDeleteItemClickHandler = async (item) => {
         const hasConfirm = confirm(`Изтриване на артикул - ${item.itemTitle}`);
         if (!hasConfirm) {

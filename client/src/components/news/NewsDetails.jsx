@@ -20,13 +20,12 @@ export default function NewsDetails() {
 
     useEffect(() => {
         if (getAll.length > 0 && userId) {
-            // Find the like where both the newsId and userId match
             const likedNews = getAll.find(like => like._ownerId === userId && like.newsId === getOne._id);
 
             if (likedNews) {
-                setLikedNewsId(likedNews._id); // Set the liked news ID
+                setLikedNewsId(likedNews._id);
             } else {
-                setLikedNewsId(null); // Set it to null if no match is found
+                setLikedNewsId(null);
             }
         }
     }, [getAll, userId, getOne._id]);
@@ -104,7 +103,6 @@ export default function NewsDetails() {
                                         <span className=" text-red-500 text-xl">
                                             {likedNewsId ? <FaHeart /> : <FaRegHeart />}
                                         </span>
-                                        {/* Filter likes to show only those for the current news */}
                                         <span className="text-gray-800 font-light text-xs mx-2">
                                             {getAll.filter(like => like.newsId === getOne._id).length || ""}
                                         </span>
@@ -158,10 +156,10 @@ export default function NewsDetails() {
                 </div>
             </div>
 
-            {/* Review Section (Made Consistent Width with Upper Part) */}
+            {/* Review Section */}
             <div className="mt-10 mx-auto grid max-w-7xl px-4 sm:px-6 lg:px-8 border-t border-gray-300 py-10">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                    {/* Left Column - Review Form */}
+                    {/* Review Form */}
                     <div className="col-span-12 md:col-span-4 p-2">
                         <h3 className="text-lg font-semibold text-gray-800 border-b pb-3">Оставете отзив</h3>
                         <form className="mt-4 space-y-3">
@@ -193,7 +191,7 @@ export default function NewsDetails() {
                         </form>
                     </div>
 
-                    {/* Right Column - Reviews */}
+                    {/* Reviews */}
                     <div className="col-span-12 md:col-span-8">
                         <h3 className="text-xl font-semibold text-gray-800 border-b border-gray-300 pb-5 pl-4">Отзиви</h3>
                         <div className="mt-2 space-y-4">

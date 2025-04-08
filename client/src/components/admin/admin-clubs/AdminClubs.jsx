@@ -47,7 +47,7 @@ export default function AdminClubs() {
                                                 ? URL.createObjectURL(club.clubImgFile[0])
                                                 : club.clubImgUrl && club.clubImgUrl.trim() !== ""
                                                     ? club.clubImgUrl
-                                                    : "/public/clubs-logo/bft.png"
+                                                    : "/clubs-logo/bft.png"
                                         }
                                         alt="Club Logo"
                                         className="w-16 h-16 rounded-full object-cover"

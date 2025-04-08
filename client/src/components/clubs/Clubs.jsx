@@ -30,7 +30,7 @@ export default function Clubs() {
                                             ? URL.createObjectURL(club.clubImgFile[0])
                                             : club.clubImgUrl && club.clubImgUrl.trim() !== ""
                                                 ? club.clubImgUrl
-                                                : "/public/clubs-logo/bft.png"
+                                                : "/clubs-logo/bft.png"
                                     }
                                     alt={club.clubName}
                                     className="mb-4 w-32 h-32 object-cover rounded-xl"

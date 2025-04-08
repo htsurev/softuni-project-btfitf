@@ -2,6 +2,7 @@ import { useLocation, Link } from "react-router-dom";
 
 const translations = {
     education: "Обучение",
+    news: "Новини",
     history: "История",
     theory: "Теория",
     terminology: "Терминология",
