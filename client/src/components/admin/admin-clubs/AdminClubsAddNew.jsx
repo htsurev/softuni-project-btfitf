@@ -1,23 +1,73 @@
 import { useNavigate } from "react-router";
 import { useCreate } from "../../../api/adminApi";
+import { useState } from "react";
+import { validateClubs } from "../../../utils/validations/clubs/validateClubs";
 
 export default function AdminClubsAddNew() {
     const navigate = useNavigate();
 
+    const [formValues, setFormValues] = useState({
+        clubImgUrl: "",
+        clubName: "",
+        clubDescription: "",
+        city: "",
+        postcode: "",
+        address: "",
+        phoneNumberOne: "",
+        phoneNumberTwo: "",
+        email: "",
+    })
+    const [formFeedback, setFormFeedback] = useState({});
+
     const { create } = useCreate("clubs");
 
-    const addClubForm = async (formData) => {
-        const data = Object.fromEntries(formData);
+    const addClubForm = async (e) => {
+        e.preventDefault();
 
-        await create(data);      
+        const isConfirmed = window.confirm("Добавяне на нов клуб.");
 
-        navigate('/admin/clubs')
+        if (!isConfirmed) {
+            return;
+        }
+
+
+        const trimmedValues = {
+            ...formValues,
+            clubImgUrl: formValues.clubImgUrl?.trim(),
+            clubName: formValues.clubName?.trim(),
+            clubDescription: formValues.clubDescription?.trim(),
+            city: formValues.city?.trim(),
+            postcode: formValues.postcode?.trim(),
+            address: formValues.address?.trim(),
+            phoneNumberOne: formValues.phoneNumberOne?.trim(),
+            phoneNumberTwo: formValues.phoneNumberTwo?.trim(),
+            email: formValues.email?.trim(),
+        }
+
+        const validationMessages = validateClubs(trimmedValues);
+
+        if (Object.keys(validationMessages).length > 0) {
+            setFormFeedback(validationMessages);
+            return;
+        }
+
+        const data = {
+            ...trimmedValues,
+        }
+
+        try {
+            await create(data);
+            navigate('/admin/clubs');
+        } catch (error) {
+            console.error("Error creating club:", error);
+        }
+
 
     };
 
     return (
         <div className="flex flex-col justify-center items-center text-white my-10">
-            <form action={addClubForm}>
+            <form onSubmit={addClubForm}>
                 <div className="space-y-12">
 
                     <div className="border-b border-gray-900/10 pb-12">
@@ -66,13 +116,15 @@ export default function AdminClubsAddNew() {
                                 <label htmlFor="clubName" className="block text-sm/6 font-medium text-gray-900">
                                     Име на клуба *
                                 </label>
+                                {formFeedback.clubName && <p className="text-red-500 text-sm mt-1">{formFeedback.clubName}</p>}
                                 <div className="mt-2">
                                     <input
                                         id="clubName"
                                         name="clubName"
                                         type="text"
+                                        value={formValues.clubName}
+                                        onChange={(e) => setFormValues({ ...formValues, clubName: e.target.value })}
                                         placeholder="Име на клуба"
-                                        required
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -86,6 +138,8 @@ export default function AdminClubsAddNew() {
                                     <textarea
                                         id="clubDescription"
                                         name="clubDescription"
+                                        value={formValues.clubDescription}
+                                        onChange={(e) => setFormValues({ ...formValues, clubDescription: e.target.value })}
                                         placeholder="Година на създаване, постижения, интересни факти, какво е постигнал и какво го прави специален ..."
                                         className="h-30 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     ></textarea>
@@ -96,13 +150,15 @@ export default function AdminClubsAddNew() {
                                 <label htmlFor="city" className="block text-sm/6 font-medium text-gray-900">
                                     Град *
                                 </label>
+                                {formFeedback.city && <p className="text-red-500 text-sm mt-1">{formFeedback.city}</p>}
                                 <div className="mt-2">
                                     <input
                                         id="city"
                                         name="city"
                                         type="text"
                                         placeholder="Град"
-                                        required
+                                        value={formValues.city}
+                                        onChange={(e) => setFormValues({ ...formValues, city: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -112,13 +168,15 @@ export default function AdminClubsAddNew() {
                                 <label htmlFor="postcode" className="block text-sm/6 font-medium text-gray-900">
                                     пощенски код *
                                 </label>
+                                {formFeedback.postcode && <p className="text-red-500 text-sm mt-1">{formFeedback.postcode}</p>}
                                 <div className="mt-2">
                                     <input
                                         id="postcode"
                                         name="postcode"
-                                        type="text"
+                                        type="number"
                                         placeholder="1234"
-                                        required
+                                        value={formValues.postcode}
+                                        onChange={(e) => setFormValues({ ...formValues, postcode: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -128,13 +186,15 @@ export default function AdminClubsAddNew() {
                                 <label htmlFor="address" className="block text-sm/6 font-medium text-gray-900">
                                     Адрес *
                                 </label>
+                                {formFeedback.address && <p className="text-red-500 text-sm mt-1">{formFeedback.address}</p>}
                                 <div className="mt-2">
                                     <input
                                         id="address"
                                         name="address"
                                         type="text"
                                         placeholder="Адрес"
-                                        required
+                                        value={formValues.address}
+                                        onChange={(e) => setFormValues({ ...formValues, address: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -148,19 +208,24 @@ export default function AdminClubsAddNew() {
                                     <input
                                         id="phoneNumberOne"
                                         name="phoneNumberOne"
-                                        type="tel"
+                                        type="number"
                                         placeholder="0879123456"
-                                        required
+                                        value={formValues.phoneNumberOne}
+                                        onChange={(e) => setFormValues({ ...formValues, phoneNumberOne: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
+                                    {formFeedback.phoneNumberOne && <p className="text-red-500 text-sm mt-1">{formFeedback.phoneNumberOne}</p>}
                                     <input
                                         id="phoneNumberTwo"
                                         name="phoneNumberTwo"
-                                        type="tel"
+                                        type="number"
                                         autoComplete="tel"
                                         placeholder="optional"
+                                        value={formValues.phoneNumberTwo}
+                                        onChange={(e) => setFormValues({ ...formValues, phoneNumberTwo: e.target.value })}
                                         className=" mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
+                                    {formFeedback.phoneNumberTwo && <p className="text-red-500 text-sm mt-1">{formFeedback.phoneNumberTwo}</p>}
                                 </div>
                             </div>
 
@@ -168,13 +233,15 @@ export default function AdminClubsAddNew() {
                                 <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                                     Email *
                                 </label>
+                                {formFeedback.email && <p className="text-red-500 text-sm mt-1">{formFeedback.email}</p>}
                                 <div className="mt-2">
                                     <input
                                         id="email"
                                         name="email"
                                         type="email"
                                         placeholder="example@domain.com"
-                                        required
+                                        value={formValues.email}
+                                        onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                     />
                                 </div>
@@ -189,7 +256,7 @@ export default function AdminClubsAddNew() {
                 <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button
                         type="submit"
-                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                     >
                         Добави
                     </button>

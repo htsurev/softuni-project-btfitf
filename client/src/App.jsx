@@ -36,8 +36,8 @@ import Education from './components/education/Education'
 import Store from './components/store/Store'
 import AdminProfiles from './components/admin/admin-profiles/AdminProfiles'
 import AdminStore from './components/admin/admin-store/AdminStore'
-import AdminStoreAddNewItem from './components/admin/admin-store/AdminStoreAddNewItem'
-import AdminStoreItemEdit from './components/admin/admin-store/AdminStoreItemEdit'
+import AdminStoreAddNewAndEditItem from './components/admin/admin-store/AdminStoreAddNewAndEditItem'
+// import AdminStoreItemEdit from './components/admin/admin-store/AdminStoreItemEdit'
 import StoreItemDetails from './components/store/StoreItemDetails'
 
 function App() {
@@ -101,8 +101,8 @@ function App() {
                                 <Route path='/admin/clubs/:clubId/edit' element={<AdminClubsEdit />} />
                                 <Route path='/admin/profiles' element={<AdminProfiles />} />
                                 <Route path='/admin/store' element={<AdminStore />} />
-                                <Route path='/admin/store/create' element={<AdminStoreAddNewItem />} />
-                                <Route path='/admin/store/:itemId/edit' element={<AdminStoreItemEdit />} />
+                                <Route path='/admin/store/create' element={<AdminStoreAddNewAndEditItem />} />
+                                <Route path='/admin/store/:itemId/edit' element={<AdminStoreAddNewAndEditItem />} />
                                 <Route path='/logout' element={<Logout />} />
                             </Route>
 

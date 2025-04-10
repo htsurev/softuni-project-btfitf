@@ -3,6 +3,8 @@ import { UserContext } from "../../../contexts/UserContext";
 import { useCreate } from "../../../api/adminApi";
 import { useNavigate } from "react-router";
 
+import { validateNewsEvent } from "../../../utils/validations/news/validateNewsEvent";
+
 export default function AdminNewsAddNew() {
     const navigate = useNavigate();
     const { email } = useContext(UserContext);
@@ -10,19 +12,47 @@ export default function AdminNewsAddNew() {
 
     const { create } = useCreate("news");
 
-    const addNewsEventsForm = async (formData) => {
-        const data = Object.fromEntries(formData);
+    const [formValues, setFormValues] = useState({
+        imageUrl: "",
+        title: "",
+        description: "",
+        eventLocation: "",
+        eventDate: "",
+        postStatus: false
+    });
+    const [formFeedback, setFormFeedback] = useState({});
 
+    const addNewsEventsForm = async (e) => {
+        e.preventDefault();
+
+        const trimmedValues = {
+            ...formValues,
+            title: formValues.title?.trim(),
+            description: formValues.description?.trim(),
+            eventLocation: formValues.eventLocation?.trim(),
+            eventDate: formValues.eventDate?.trim(),
+        };
+    
         const todaysDate = new Date();
         const formattedDate = todaysDate.toISOString().split('T')[0];
 
-        data.newsType = newsType;
-        data.eventDate = formData.get("eventDate") || new Date().toISOString().split('T')[0];
-        data.postStatus = formData.get("postStatus") || "off";
-        data.publishedDate = formattedDate;
-        data.publishedBy = email;
+        const validationMessages = validateNewsEvent(trimmedValues, newsType);
 
-        await create(data);       
+        if (Object.keys(validationMessages).length > 0) {
+            setFormFeedback(validationMessages);
+            return;
+        }
+
+        const data = {
+            ...trimmedValues,
+            newsType,
+            eventDate: trimmedValues.eventDate || new Date().toISOString().split('T')[0],
+            postStatus: trimmedValues.postStatus ? "on" : "off",
+            publishedDate: formattedDate,
+            publishedBy: email
+        };
+
+        await create(data);
 
         navigate('/admin/news')
     };
@@ -34,7 +64,7 @@ export default function AdminNewsAddNew() {
 
     return (
         <div className="flex items-center justify-center min-h-screen py-10">
-            <form action={addNewsEventsForm} className="w-full max-w-2xl">
+            <form onSubmit={addNewsEventsForm} className="w-full max-w-2xl">
                 <div className="space-y-12">
                     <div className="border-b border-gray-900/10 pb-12">
                         <h2 className="text-2xl font-semibold text-gray-900">Добавяне на</h2>
@@ -101,6 +131,8 @@ export default function AdminNewsAddNew() {
                                         name="imageUrl"
                                         type="text"
                                         placeholder="https://..."
+                                        defaultValue={formValues.imageUrl}
+                                        onChange={(e) => setFormValues({ ...formValues, imageUrl: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                     />
                                 </div>
@@ -111,13 +143,15 @@ export default function AdminNewsAddNew() {
                                 <label htmlFor="title" className="block text-sm font-medium text-gray-900">
                                     Заглавие *
                                 </label>
+                                {formFeedback.title && <p className="text-red-500 text-sm mt-1">{formFeedback.title}</p>}
                                 <div className="mt-2">
                                     <input
                                         id="title"
                                         name="title"
                                         type="text"
                                         placeholder="Заглавие"
-                                        required
+                                        defaultValue={formValues.title}
+                                        onChange={(e) => setFormValues({ ...formValues, title: e.target.value })}
                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                     />
                                 </div>
@@ -128,12 +162,14 @@ export default function AdminNewsAddNew() {
                                 <label htmlFor="description" className="block text-sm font-medium text-gray-900">
                                     Описание *
                                 </label>
+                                {formFeedback.description && <p className="text-red-500 text-sm mt-1">{formFeedback.description}</p>}
                                 <div className="mt-2">
                                     <textarea
                                         id="description"
                                         name="description"
                                         placeholder="Описание"
-                                        required
+                                        defaultValue={formValues.description}
+                                        onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
                                         className="block w-full h-50 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                     />
                                 </div>
@@ -146,13 +182,15 @@ export default function AdminNewsAddNew() {
                                         <label htmlFor="eventLocation" className="block text-sm font-medium text-gray-900">
                                             Град, Държава *
                                         </label>
+                                        {formFeedback.eventLocation && <p className="text-red-500 text-sm mt-1">{formFeedback.eventLocation}</p>}
                                         <div className="mt-2">
                                             <input
                                                 id="eventLocation"
                                                 name="eventLocation"
                                                 type="text"
                                                 placeholder="Град, Държава"
-                                                required
+                                                defaultValue={formValues.eventLocation}
+                                                onChange={(e) => setFormValues({ ...formValues, eventLocation: e.target.value })}
                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                             />
                                         </div>
@@ -162,19 +200,20 @@ export default function AdminNewsAddNew() {
                                         <label htmlFor="eventDate" className="block text-sm font-medium text-gray-900">
                                             Дата *
                                         </label>
+                                        {formFeedback.eventDate && <p className="text-red-500 text-sm mt-1">{formFeedback.eventDate}</p>}
                                         <div className="mt-2">
                                             <input
                                                 id="eventDate"
                                                 name="eventDate"
                                                 type="date"
-                                                required
+                                                defaultValue={formValues.eventDate}
+                                                onChange={(e) => setFormValues({ ...formValues, eventDate: e.target.value })}
                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                                             />
                                         </div>
                                     </div>
                                 </>
                             )}
-
                         </div>
                     </div>
 
@@ -185,6 +224,8 @@ export default function AdminNewsAddNew() {
                                 type="checkbox"
                                 id="postStatus"
                                 name="postStatus"
+                                checked={formValues.postStatus}
+                                onChange={() => setFormValues({ ...formValues, postStatus: !formValues.postStatus })}
                                 className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                             />
                             <label htmlFor="postStatus" className="ml-2 text-sm text-gray-600">Публикувай</label>
@@ -197,9 +238,9 @@ export default function AdminNewsAddNew() {
                             Добави
                         </button>
                     </div>
-
                 </div>
             </form>
         </div>
     );
+
 }

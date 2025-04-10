@@ -1,10 +1,12 @@
 import { useParams } from "react-router";
 import { useCreate, useDelete, useEdit, useGetAll, useGetOne } from "../../api/adminApi";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Dialog, DialogPanel, DialogBackdrop } from '@headlessui/react'
 import { FaEdit, FaRegTrashAlt, FaSpinner } from "react-icons/fa";
 
 import styles from "../../assets/styles/ratingStars.module.css"
+
+import { validateReviews } from "../../utils/validations/reviews/validateReviews";
 
 import { TbTruckDelivery } from "react-icons/tb";
 import { SlLocationPin } from "react-icons/sl";
@@ -14,47 +16,63 @@ import useAuth from "../../hooks/useAuth";
 export default function StoreItemDetails() {
     const { itemId } = useParams();
     const { getOne } = useGetOne("store", itemId);
-    const { edit } = useEdit("reviews");
-    const [selectedSize, setSelectedSize] = useState([]);
-    const [quantity, setQuantity] = useState(0);
     const { email, _id: authorId } = useAuth();
     const { getAll, refreshData } = useGetAll("reviews");
+
+    const { edit } = useEdit("reviews");
     const { create } = useCreate("reviews");
     const { deleteData } = useDelete("reviews");
 
+    const [selectedSize, setSelectedSize] = useState([]);
+    const [quantity, setQuantity] = useState(0);
+
     const [loadingImage, setLoadingImage] = useState(true);
     const [showImage, setShowImage] = useState(null);
-    const [showform, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [dataFormReview, setDataFormReview] = useState({});
 
-    const isReviewed = getAll.find(u => u._ownerId === authorId && u.postId === getOne._id);   
+    const isReviewed = getAll.find(u => u._ownerId === authorId && u.postId === getOne._id);
+
+    const [formFeedback, setFormFeedback] = useState({});
+
+    const averageRating = useMemo(() => {
+        if (!getAll || getAll.length === 0) return 0;
+    
+        // Filter reviews for the specific postId
+        const filteredReviews = getAll.filter((review) => review.postId === getOne._id);
+    
+        if (filteredReviews.length === 0) return 0;
+    
+        // Calculate the total rating for the filtered reviews
+        const total = filteredReviews.reduce((sum, review) => sum + Number(review.rate || 0), 0);
+    
+        // Return the average, rounded to 1 decimal place
+        return (total / filteredReviews.length).toFixed(1);
+    }, [getAll, getOne._id]);
+   
+    const [formValues, setFormValues] = useState({
+        postId: "",
+        reviewSender: email,
+        rate: "",
+        reviewTite: "",
+        reviewDescription: "",
+    });
 
     useEffect(() => {
-        if (getAll && getAll.length > 0) {
-            if (isReviewed) {
-                setShowForm(false);
-            } else {
-                setShowForm(true);
-            }
-        }
-    }, [getAll, authorId, isReviewed]);
+        if (!getAll || !getOne?._id || !authorId) return;
+
+        const alreadyReviewed = getAll.find(
+            (u) => u._ownerId === authorId && u.postId === getOne._id
+        );
+
+        setShowForm(!alreadyReviewed);
+    }, [getAll, getOne?._id, authorId]);
+
+
 
     const handleSizeClick = (sizeKey, sizeData) => {
         setSelectedSize({ size: sizeKey, ...sizeData });
     };
-
-
-    const addNewReviewForm = async (formData) => {
-        const data = Object.fromEntries(formData);
-
-        data.postId = getOne._id;
-        data.reviewSender = email;
-        data.rate = Number(data.rate);
-
-        await create(data);
-        refreshData();
-        setShowForm(false);
-    }
 
     const deleteReviewClickHandle = async (reviewId) => {
         const hasConfirm = confirm("Изтриване на коментар");
@@ -65,39 +83,67 @@ export default function StoreItemDetails() {
         await deleteData(reviewId);
         refreshData();
         setShowForm(true);
-
+        setDataFormReview({});
     }
 
     const editReviewClickHandle = (review) => {
         setShowForm(true);
         setDataFormReview(review);
-
+        setFormFeedback({});
     }
 
     const cancelReviewClickHandle = () => {
         setShowForm(false);
-    }
-
-    const editReviewForm = async (formData) => {
-        const data = Object.fromEntries(formData);
-
-        data.postId = getOne._id;
-        data.reviewSender = email;
-        data.rate = Number(data.rate);
-
-        await edit(dataFormReview._id, data);
         setDataFormReview({});
-        refreshData();
-        // console.log(data);
-        // console.log(dataFormReview._id);
-
     }
 
+    useEffect(() => {
+        if (getAll && getOne?._id) {
+            const foundReview = getAll.find(u => u._ownerId === authorId && u.postId === getOne._id);
+            setFormValues((prev) => ({
+                ...prev,
+                rate: foundReview?.rate || "",
+                reviewTite: foundReview?.reviewTite || "",
+                reviewDescription: foundReview?.reviewDescription || "",
+            }));
+        }
+    }, [getAll, getOne?._id, authorId]);
 
+    const handleReviewForm = async (e) => {
+        e.preventDefault();
+
+        const trimmedValues = {
+            ...formValues,
+            postId: getOne._id,
+            reviewTite: formValues.reviewTite?.trim(),
+            reviewDescription: formValues.reviewDescription?.trim(),
+            rate: Number(formValues.rate),
+        }
+
+        const validationMessages = validateReviews(trimmedValues);
+
+        if (Object.keys(validationMessages).length > 0) {
+            setFormFeedback(validationMessages);
+            return;
+        }
+
+        if (isReviewed) {
+            await edit(dataFormReview._id, trimmedValues);
+            setDataFormReview({});
+            refreshData();
+            setFormFeedback({});
+        } else {
+            await create(trimmedValues);
+            refreshData();
+            setShowForm(false);
+            setFormFeedback({});
+        }
+
+    }
 
     return (
         <div className="max-w-7xl mx-auto p-3 bg-white my-5">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 shadow-lg rounded-lg pt-5 pb-20 px-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 shadow-lg rounded-lg pt-5 pb-20 px-5">
                 {/* Product Image */}
                 <div className="relative w-full min-h-[200px] flex items-center justify-center">
                     {loadingImage && (
@@ -143,12 +189,21 @@ export default function StoreItemDetails() {
                         <span>{getOne.itemCategory}</span>
                     </div>
                     <div className="flex items-center mt-2">
-                        <span className="text-yellow-500">★★★★★</span>
-                        <span className="ml-2 text-gray-600">(4.5 / 5)</span>
+                        <span className="text-gray-600 text-sm mr-2">{averageRating}</span>
+                        <div className="flex">
+                            {Array.from({ length: 5 }, (_, i) => (
+                                <span
+                                    key={i}
+                                    className={`text-lg ${i < Math.round(averageRating) ? "text-yellow-500" : "text-gray-300"}`}
+                                >
+                                    ★
+                                </span>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Size Options */}
-                    {getOne.sizeData && (
+                    {getOne.sizeData && Object.keys(getOne.sizeData).length > 0 && (
                         <div className="mt-4">
                             <label className="text-gray-400 font-semibold mr-2">Размер:</label>
                             <span>{selectedSize.size}</span>
@@ -173,7 +228,7 @@ export default function StoreItemDetails() {
                                             >
                                                 <span className="text-sm font-semibold border-b border-gray-300 w-full pl-2">{size}</span>
                                                 <span className="text-xs text-gray-600 mt-1 pl-2">
-                                                    {isAvailable ? `${getOne.sizeData[size].price} ${getOne.sizeData[size].currency}` : "Няма наличност"}
+                                                    {isAvailable ? `${getOne.sizeData[size].price.toFixed(2)} ${getOne.sizeData[size].currency}` : "Няма наличност"}
                                                 </span>
                                             </div>
                                         );
@@ -195,7 +250,7 @@ export default function StoreItemDetails() {
                 {/* Price & Purchase Options */}
                 <div className="w-80 border rounded-xl border-gray-300 px-6 py-4 flex flex-col gap-4 mx-auto">
                     <h3 className="text-xl font-semibold text-gray-800">
-                        {getOne && getOne.sizeData
+                        {getOne && getOne.sizeData && Object.keys(getOne.sizeData).length > 0
                             ? (selectedSize && selectedSize.price && selectedSize.currency
                                 ? (
                                     <div>
@@ -203,7 +258,7 @@ export default function StoreItemDetails() {
                                         <span className="text-2xl">{Math.floor(selectedSize.price)}</span>
                                         {/* Decimal part */}
                                         {selectedSize.price.toString().includes('.') && (
-                                            <sup className="text-md">{selectedSize.price.toString().split('.')[1]}</sup>
+                                            <sup className="text-md">{selectedSize.price.toFixed(2).toString().split('.')[1]}</sup>
                                         )}
                                         <span className="text-base">{selectedSize.currency}</span>
                                     </div>
@@ -216,14 +271,13 @@ export default function StoreItemDetails() {
                                         <span className="text-2xl">{Math.floor(getOne.itemPrice)}</span>
                                         {/* Decimal part */}
                                         {getOne.itemPrice.toString().includes('.') && (
-                                            <sup className="text-md">{getOne.itemPrice.toString().split('.')[1]}</sup>
+                                            <sup className="text-md">{getOne.itemPrice.toFixed(2).toString().split('.')[1]}</sup>
                                         )}
                                         <span className="text-base">{getOne.currency}</span>
                                     </div>
                                 )
                                 : "")} {/* Loading ... */}
                     </h3>
-
 
                     <div className="flex flex-col gap-0">
                         <p className="flex items-center text-gray-700 ">
@@ -245,7 +299,7 @@ export default function StoreItemDetails() {
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
                         >
-                            {getOne.sizeData ? (
+                            {getOne.sizeData && Object.keys(getOne.sizeData).length > 0 ? (
                                 selectedSize && selectedSize.qtty ? (
                                     [...Array(Number(selectedSize.qtty))].map((_, index) => (
                                         <option key={index} value={index + 1}>
@@ -296,35 +350,90 @@ export default function StoreItemDetails() {
             {/* Reviews Section */}
             <div className="mt-10 grid grid-cols-12 gap-8">
                 {/* Left Column - Review Form */}
-                {email && showform &&
+                {email && showForm &&
                     (
                         <div className="col-span-12 md:col-span-4 p-2">
                             <h3 className="text-lg font-semibold text-gray-800 border-b pb-3">Оставете отзив</h3>
-                            <form className="mt-4 space-y-3" action={isReviewed ? editReviewForm : addNewReviewForm}>
+                            <form className="mt-4 space-y-3" onSubmit={handleReviewForm}>
                                 {/* <input type="text" placeholder="Вашето име" name="reviewSender" className="w-full p-2 border rounded h-8 border-gray-300 bg-gray-200 cursor-not-allowed opacity-50" defaultValue={email} readOnly /> */}
                                 <h1>{email}</h1>
 
-                                <div className={`${styles.rate} justify-start`}>
-                                    <input type="radio" id="star5" name="rate" value="5" required />
+                                <div className={`${styles.rate} justify-start mb-0`}>
+                                    <input
+                                        type="radio"
+                                        id="star5"
+                                        name="rate"
+                                        value="5"
+                                        checked={formValues.rate === 5}
+                                        onChange={(e) => setFormValues({ ...formValues, rate: Number(e.target.value) })}
+                                    />
                                     <label htmlFor="star5" title="5 stars">★</label>
 
-                                    <input type="radio" id="star4" name="rate" value="4" />
+                                    <input
+                                        type="radio"
+                                        id="star4"
+                                        name="rate"
+                                        value="4"
+                                        checked={formValues.rate === 4}
+                                        onChange={(e) => setFormValues({ ...formValues, rate: Number(e.target.value) })}
+                                    />
                                     <label htmlFor="star4" title="4 stars">★</label>
 
-                                    <input type="radio" id="star3" name="rate" value="3" />
+                                    <input
+                                        type="radio"
+                                        id="star3"
+                                        name="rate"
+                                        value="3"
+                                        checked={formValues.rate === 3}
+                                        onChange={(e) => setFormValues({ ...formValues, rate: Number(e.target.value) })}
+                                    />
                                     <label htmlFor="star3" title="3 stars">★</label>
 
-                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <input
+                                        type="radio"
+                                        id="star2"
+                                        name="rate"
+                                        value="2"
+                                        checked={formValues.rate === 2}
+                                        onChange={(e) => setFormValues({ ...formValues, rate: Number(e.target.value) })}
+                                    />
                                     <label htmlFor="star2" title="2 stars">★</label>
 
-                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <input
+                                        type="radio"
+                                        id="star1"
+                                        name="rate"
+                                        value="1"
+                                        checked={formValues.rate === 1}
+                                        onChange={(e) => setFormValues({ ...formValues, rate: Number(e.target.value) })}
+                                    />
                                     <label htmlFor="star1" title="1 star">★</label>
+
                                 </div>
+                                {formFeedback.rate && <p className="text-red-500 text-xs">{formFeedback.rate}</p>}
 
-                                <input type="text" name="reviewTite" placeholder="Заглавие на отзива" className="w-full p-2 border rounded h-8 border-gray-300" defaultValue={isReviewed ? dataFormReview.reviewTite : ''} required />
-                                <textarea placeholder="Вашият отзив..." name="reviewDescription" rows="3" className="w-full p-2 border rounded border-gray-300" defaultValue={isReviewed ? dataFormReview.reviewDescription : ''} required></textarea>
+                                <input
+                                    type="text"
+                                    name="reviewTite"
+                                    placeholder="Заглавие на отзива"
+                                    className="w-full p-2 border rounded h-8 border-gray-300 mb-1 mt-3"
+                                    value={formValues.reviewTite}
+                                    onChange={(e) => setFormValues({ ...formValues, reviewTite: e.target.value })}
+                                />
+                                {formFeedback.reviewTite && <p className="text-red-500 text-xs">{formFeedback.reviewTite}</p>}
 
-                                <div className="flex justify-between gap-2">
+                                <textarea
+                                    placeholder="Вашият отзив..."
+                                    name="reviewDescription"
+                                    rows="3"
+                                    className="w-full p-2 border rounded border-gray-300 mb-0 mt-3"
+                                    value={formValues.reviewDescription}
+                                    onChange={(e) => setFormValues({ ...formValues, reviewDescription: e.target.value })}
+                                >
+                                </textarea>
+                                {formFeedback.reviewDescription && <p className="text-red-500 text-xs">{formFeedback.reviewDescription}</p>}
+
+                                <div className="flex justify-between gap-2 mt-5">
                                     <button
                                         type="submit"
                                         className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 cursor-pointer"
@@ -394,7 +503,6 @@ export default function StoreItemDetails() {
                                                     </button>
                                                 </div>
                                             )}
-
 
                                         </div>
 

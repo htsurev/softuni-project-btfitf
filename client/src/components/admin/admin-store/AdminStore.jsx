@@ -41,15 +41,16 @@ export default function AdminStore() {
                                 key={item._id}
                                 className={`border border-gray-300 rounded-lg shadow-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-xl ${item.itemStatus === "off" ? "bg-red-100 border border-red-500" : "bg-green-50 border border-green-500"}`}
                             >
-                                <div className="relative w-full h-30 mb-4">
-                                    {item.itemImgUrl && (
-                                        <img
-                                            src={item.itemImgUrl}
-                                            alt={item.itemTitle}
-                                            onClick={() => setShowImage(item.itemImgUrl)}
-                                            className="absolute inset-0 w-full h-full object-contain rounded-lg cursor-pointer"
-                                        />
-                                    )}
+                                <div className="relative w-full h-40 mb-4">
+                                    <img
+                                        src={item.itemImgUrl !== ""
+                                            ? item.itemImgUrl
+                                            : "/alert-images/noimage.jpg"
+                                        }
+                                        alt={item.itemTitle}
+                                        onClick={() => setShowImage(item.itemImgUrl)}
+                                        className="absolute inset-0 w-full h-full object-contain rounded-lg cursor-pointer"
+                                    />
                                 </div>
 
                                 <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-1">{item.itemTitle}</h3>

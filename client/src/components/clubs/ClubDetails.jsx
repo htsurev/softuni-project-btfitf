@@ -41,8 +41,8 @@ export default function ClubDetails() {
                         <div className="flex items-center mb-2 md:mb-0">
                             <MdPhone className="mr-2 text-lg" />
                             <p className="text-gray-700">
-                                {getOne.phoneNumberOne}
-                                {getOne.phoneNumberTwo && `, ${getOne.phoneNumberTwo}`}
+                                {getOne.phoneNumberOne && `${getOne.phoneNumberOne.startsWith('0') ? '+359 ' + getOne.phoneNumberOne.slice(1) : getOne.phoneNumberOne}`}
+                                {getOne.phoneNumberTwo && `, ${getOne.phoneNumberTwo.startsWith('0') ? '+359 ' + getOne.phoneNumberTwo.slice(1) : getOne.phoneNumberTwo}`}
                             </p>
                         </div>
 
